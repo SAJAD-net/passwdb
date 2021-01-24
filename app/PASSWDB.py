@@ -1,3 +1,5 @@
+#!/usr/bin/python3
+
 ##THIS IS THE IMPORTING OS LIBRARY
 import os,sys
 from pyfiglet import figlet_format 
