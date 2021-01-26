@@ -2,15 +2,20 @@
 
 ##THIS IS THE IMPORTING OS LIBRARY
 import os,sys
-from pyfiglet import figlet_format 
 from colorama import Fore,init
 init()
 ##THIS IS THE FUNCTOIN SHOW THE BANNER
 def banner():
-	text = "HASHER"
-	print(Fore.LIGHTBLACK_EX+figlet_format(text))
-	print("""** Welcome to HASHER
-		## For 'EXIT', Enter 'quit' !\n""")
+	print(Fore.RED+"""
+██████╗  █████╗ ███████╗███████╗██╗    ██╗██████╗ ██████╗ 
+██╔══██╗██╔══██╗██╔════╝██╔════╝██║    ██║██╔══██╗██╔══██╗
+██████╔╝███████║███████╗███████╗██║ █╗ ██║██║  ██║██████╔╝
+██╔═══╝ ██╔══██║╚════██║╚════██║██║███╗██║██║  ██║██╔══██╗
+██║     ██║  ██║███████║███████║╚███╔███╔╝██████╔╝██████╔╝
+╚═╝     ╚═╝  ╚═╝╚══════╝╚══════╝ ╚══╝╚══╝ ╚═════╝ ╚═════╝ 
+""")
+print("""** WELCOME TO PASSWDB \n
+    			## For 'EXIT', Enter 'quit' !\n""")
 ##THIS IS THE FUNCTOIN FOR SAVE A PASSW0RD AND HASHs ON DATABASE
 def sqliteW(sname,name,passwd,hash):
 	import sqlite3
@@ -138,7 +143,7 @@ def hash(sname,name,passwd):
 def acount():
 	os.system("clear")
 	banner()
-	print(Fore.LIGHTBLUE_EX+"WELCOME TO HASHER ! :)")
+	print(Fore.LIGHTBLUE_EX+"WELCOME TO PASSWDB \n ! :)")
 	name=input(Fore.LIGHTGREEN_EX+"➜"+Fore.LIGHTBLUE_EX+" Enter Your Name "+Fore.LIGHTRED_EX+"✗ "+Fore.LIGHTBLUE_EX+"")
 	passwd=input(Fore.LIGHTGREEN_EX+"➜"+Fore.LIGHTBLUE_EX+" Enter your password For Login "+Fore.LIGHTRED_EX+"✗ "+Fore.LIGHTBLUE_EX)
 	print(Fore.LIGHTCYAN_EX+"➜"+Fore.LIGHTBLUE_EX+" "+"OK !, Please wite ...")
@@ -169,7 +174,7 @@ def login():
 	from time import sleep 
 	os.system("clear")
 	banner()
-	print(Fore.LIGHTBLUE_EX+"WELCOME TO HASHER ! :)")
+	print(Fore.LIGHTBLUE_EX+"WELCOME TO PASSWDB ! :)\n")
 	incm=["1-(login)--> login to a home ","2-(acount)--> make acount "]
 	for e in incm:
 		print(Fore.CYAN+"➜"+Fore.LIGHTBLUE_EX+" "+e,"\n")
