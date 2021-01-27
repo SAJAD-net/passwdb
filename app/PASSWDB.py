@@ -4,6 +4,7 @@
 import os,sys
 from colorama import Fore,init
 init()
+from getpass import getpass
 ##THIS IS THE FUNCTOIN SHOW THE BANNER
 def banner():
 	print(Fore.RED+"""
