@@ -220,6 +220,7 @@ def loginer():
 	login()
 def main(sname):
 	from time import sleep 
+	pwd=os.getcwd()
 	os.system("clear")
 	banner()
 	incm=["1-(Write)--> write a passwd and create hash for it","2-(Read)--> Read the name, passwd and hash it on database",\
@@ -239,7 +240,7 @@ def main(sname):
 	elif com == "3":
 		sqliteD(sname)
 	elif com =="exit" or "quit":
-                os.chdir("cd")
+		os.chdir(pwd)
 		sys.exit()
 	else:
 		print(Fore.LIGHTRED_EX+"➜"+Fore.LIGHTBLUE_EX+" This is no found !")
