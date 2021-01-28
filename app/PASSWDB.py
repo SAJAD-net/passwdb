@@ -239,6 +239,7 @@ def main(sname):
 	elif com == "3":
 		sqliteD(sname)
 	elif com =="exit" or "quit":
+                os.chdir("cd")
 		sys.exit()
 	else:
 		print(Fore.LIGHTRED_EX+"➜"+Fore.LIGHTBLUE_EX+" This is no found !")
