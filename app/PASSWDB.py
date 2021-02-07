@@ -142,7 +142,7 @@ def hash(sname,name,passwd):
 	sqliteW(sname,name,passwd,hash)
 #	print("This is the hash of passwd --> %s"%(hash))
 ##THIS IS THE MAIB FUNCTION 
-def acount():
+def account():
 	os.system("clear")
 	banner()
 	print(Fore.LIGHTBLUE_EX+"WELCOME TO PASSWDB \n ! :)")
@@ -177,7 +177,7 @@ def login():
 	os.system("clear")
 	banner()
 	print(Fore.LIGHTBLUE_EX+"WELCOME TO PASSWDB ! :)\n")
-	incm=["1-(login)--> login to a home ","2-(acount)--> make acount "]
+	incm=["1-(login)--> login to a home ","2-(account)--> make account "]
 	for e in incm:
 		print(Fore.CYAN+"➜"+Fore.LIGHTBLUE_EX+" "+e,"\n")
 		sleep(0.2)
