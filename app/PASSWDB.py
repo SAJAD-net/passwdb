@@ -7,7 +7,7 @@ init()
 from getpass import getpass
 ##THIS IS THE FUNCTOIN SHOW THE BANNER
 def banner():
-	print(Fore.RED+"""
+    print(Fore.RED+f"""
 ██████╗  █████╗ ███████╗███████╗██╗    ██╗██████╗ ██████╗ 
 ██╔══██╗██╔══██╗██╔════╝██╔════╝██║    ██║██╔══██╗██╔══██╗
 ██████╔╝███████║███████╗███████╗██║ █╗ ██║██║  ██║██████╔╝
@@ -15,6 +15,7 @@ def banner():
 ██║     ██║  ██║███████║███████║╚███╔███╔╝██████╔╝██████╔╝
 ╚═╝     ╚═╝  ╚═╝╚══════╝╚══════╝ ╚══╝╚══╝ ╚═════╝ ╚═════╝ 
 """)
+    print(Fore.LIGHTBLUE_EX+"\t"*4,"PASSWDB V1.0\n","\t"*4,"Programmer :: ", Fore.RED+"SAJAD-CHEHRAZI")
 print("""** WELCOME TO PASSWDB \n
     			## For 'EXIT', Enter 'quit' !\n""")
 ##THIS IS THE FUNCTOIN FOR SAVE A PASSW0RD AND HASHs ON DATABASE
