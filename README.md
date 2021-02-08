@@ -3,9 +3,9 @@
 hi there.
 
 # --> description :
-	This is a PASSWDB app for managing password. ...
+	This is a PASSWDB app for upkeeping passwords. ...
 
-#--> Used of following technology :
+#--> Used of following library :
 
 1- slqite3
 2- colorama
