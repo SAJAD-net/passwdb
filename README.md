@@ -5,29 +5,6 @@
 	"" This is a 'passwdb' app for upkeep a passwords. ""
 
 
-
-## PreView
-
-██████╗  █████╗ ███████╗███████╗██╗    ██╗██████╗ ██████╗ 
-██╔══██╗██╔══██╗██╔════╝██╔════╝██║    ██║██╔══██╗██╔══██╗
-██████╔╝███████║███████╗███████╗██║ █╗ ██║██║  ██║██████╔╝
-██╔═══╝ ██╔══██║╚════██║╚════██║██║███╗██║██║  ██║██╔══██╗
-██║     ██║  ██║███████║███████║╚███╔███╔╝██████╔╝██████╔╝
-╚═╝     ╚═╝  ╚═╝╚══════╝╚══════╝ ╚══╝╚══╝ ╚═════╝ ╚═════╝ 
-
-				 PASSWDB V1.0
- 				 Programmer ::  SAJAD-CHEHRAZI
-
-WELCOME TO PASSWDB ! :)
-
-➜ 1-(login)--> login to a home  
-
-➜ 2-(acount)--> make acount  
-
-➜ (+)Fine, Enter number of Section !
-
-➜ KALI@HASHER ✗ 
-
 ## Used of following library :
 
 	1- slqite3
@@ -44,11 +21,13 @@ WELCOME TO PASSWDB ! :)
 	
 ## ScreenShot  (LOGIN)
 
-![passwdb-login](https://user-images.githubusercontent.com/71703544/107189880-10b30a00-69b8-11eb-93c7-b92ef5ce941b.png)
+![passwdb-login](https://user-images.githubusercontent.com/71703544/107191692-8ddf7e80-69ba-11eb-87af-fc324b1e9277.png)
+
 
 
 ## ScreenShot  (HOME)
 
-![passwdb](https://user-images.githubusercontent.com/71703544/107189637-ab5f1900-69b7-11eb-8d05-8b0d49d7df60.png)
+![passwdb](https://user-images.githubusercontent.com/71703544/107191680-87e99d80-69ba-11eb-8b64-72f9a0923c9c.png)
+
 
 my email : sajadsajad.sch@gmail.com
