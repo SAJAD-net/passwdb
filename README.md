@@ -4,6 +4,31 @@
 ## description :
 	"" This is a 'passwdb' app for upkeep a passwords. ""
 
+
+
+## PreView
+
+██████╗  █████╗ ███████╗███████╗██╗    ██╗██████╗ ██████╗ 
+██╔══██╗██╔══██╗██╔════╝██╔════╝██║    ██║██╔══██╗██╔══██╗
+██████╔╝███████║███████╗███████╗██║ █╗ ██║██║  ██║██████╔╝
+██╔═══╝ ██╔══██║╚════██║╚════██║██║███╗██║██║  ██║██╔══██╗
+██║     ██║  ██║███████║███████║╚███╔███╔╝██████╔╝██████╔╝
+╚═╝     ╚═╝  ╚═╝╚══════╝╚══════╝ ╚══╝╚══╝ ╚═════╝ ╚═════╝ 
+
+				 PASSWDB V1.0
+ 				 Programmer ::  SAJAD-CHEHRAZI
+
+WELCOME TO PASSWDB ! :)
+
+➜ 1-(login)--> login to a home  
+
+➜ 2-(acount)--> make acount  
+
+➜ (+)Fine, Enter number of Section !
+
+➜ KALI@HASHER ✗ 
+
+
 ## Used of following library :
 
 	1- slqite3
