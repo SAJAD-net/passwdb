@@ -8,14 +8,14 @@ from getpass import getpass
 ##THIS IS THE FUNCTOIN SHOW THE BANNER
 def banner():
     print(Fore.RED+f"""
-██████╗  █████╗ ███████╗███████╗██╗    ██╗██████╗ ██████╗ 
-██╔══██╗██╔══██╗██╔════╝██╔════╝██║    ██║██╔══██╗██╔══██╗
-██████╔╝███████║███████╗███████╗██║ █╗ ██║██║  ██║██████╔╝
-██╔═══╝ ██╔══██║╚════██║╚════██║██║███╗██║██║  ██║██╔══██╗
-██║     ██║  ██║███████║███████║╚███╔███╔╝██████╔╝██████╔╝
-╚═╝     ╚═╝  ╚═╝╚══════╝╚══════╝ ╚══╝╚══╝ ╚═════╝ ╚═════╝ 
+ ██████╗  █████╗ ███████╗███████╗██╗    ██╗██████╗ ██████╗ 
+ ██╔══██╗██╔══██╗██╔════╝██╔════╝██║    ██║██╔══██╗██╔══██╗
+ ██████╔╝███████║███████╗███████╗██║ █╗ ██║██║  ██║██████╔╝
+ ██╔═══╝ ██╔══██║╚════██║╚════██║██║███╗██║██║  ██║██╔══██╗
+ ██║     ██║  ██║███████║███████║╚███╔███╔╝██████╔╝██████╔╝
+ ╚═╝     ╚═╝  ╚═╝╚══════╝╚══════╝ ╚══╝╚══╝ ╚═════╝ ╚═════╝ 
 """)
-    print(Fore.LIGHTBLUE_EX+"\t"*4,"PASSWDB V1.0\n","\t"*4,"Programmer :: ", Fore.RED+"SAJAD-CHEHRAZI")
+    print(Fore.LIGHTBLUE_EX+"\t"*4,"PASSWDB V1.0\n","\t"*4,"Programmer :: ", Fore.RED+"SAJAD-CHEHRAZI\n")
 print("""** WELCOME TO PASSWDB \n
     			## For 'EXIT', Enter 'quit' !\n""")
 ##THIS IS THE FUNCTOIN FOR SAVE A PASSW0RD AND HASHs ON DATABASE
@@ -142,13 +142,13 @@ def hash(sname,name,passwd):
 	sqliteW(sname,name,passwd,hash)
 #	print("This is the hash of passwd --> %s"%(hash))
 ##THIS IS THE MAIB FUNCTION 
-def account():
+def acount():
 	os.system("clear")
 	banner()
-	print(Fore.LIGHTBLUE_EX+"WELCOME TO PASSWDB \n ! :)")
-	name=input(Fore.LIGHTGREEN_EX+"➜"+Fore.LIGHTBLUE_EX+" Enter Your Name "+Fore.LIGHTRED_EX+"✗ "+Fore.LIGHTBLUE_EX+"")
-	passwd=input(Fore.LIGHTGREEN_EX+"➜"+Fore.LIGHTBLUE_EX+" Enter your password For Login "+Fore.LIGHTRED_EX+"✗ "+Fore.LIGHTBLUE_EX)
-	print(Fore.LIGHTCYAN_EX+"➜"+Fore.LIGHTBLUE_EX+" "+"OK !, Please wite ...")
+	print(Fore.LIGHTBLUE_EX+" WELCOME TO PASSWDB \n ! :)")
+	name=input(Fore.LIGHTGREEN_EX+" ➜"+Fore.LIGHTBLUE_EX+" Enter Your Name "+Fore.LIGHTRED_EX+"✗ "+Fore.LIGHTBLUE_EX+"")
+	passwd=input(Fore.LIGHTGREEN_EX+" ➜"+Fore.LIGHTBLUE_EX+" Enter your password For Login "+Fore.LIGHTRED_EX+"✗ "+Fore.LIGHTBLUE_EX)
+	print(Fore.LIGHTCYAN_EX+" ➜"+Fore.LIGHTBLUE_EX+" "+"OK !, Please wite ...")
 	import hashlib
 #	passwd=input("Enter your password => ~$ ").strip()
 	hsh=hashlib.sha256()
@@ -162,13 +162,13 @@ def account():
 		db.execute("CREATE TABLE li (name varchar(20),password INT,hashs varchar(256))")
 		db.execute("INSERT INTO li VALUES('%s','%s','%s')"%(name,passwd,hash))
 		db.commit()
-		print(Fore.LIGHTCYAN_EX+"➜"+Fore.LIGHTBLUE_EX+" "+"Query 1,OK")
+		print(Fore.LIGHTCYAN_EX+"➜"+Fore.LIGHTBLUE_EX+" "+" Query 1,OK")
 		db.close()
 	except Exception:
 		db.execute("INSERT INTO li VALUES('%s','%s','%s')"%(name,passwd,hash))
 		db.commit()
 	except:
-		print(Fore.LIGHTRED_EX+"➜"+Fore.LIGHTBLUE_EX+" "+"This account is already exists !")
+		print(Fore.LIGHTRED_EX+"➜"+Fore.LIGHTBLUE_EX+" "+" This account is already exists !")
 	finally:
 		input(Fore.CYAN+"➜"+Fore.LIGHTBLUE_EX+" Press enter to login session "+Fore.LIGHTRED_EX+"✗ "+Fore.LIGHTBLUE_EX)
 		login()
@@ -176,25 +176,25 @@ def login():
 	from time import sleep 
 	os.system("clear")
 	banner()
-	print(Fore.LIGHTBLUE_EX+"WELCOME TO PASSWDB ! :)\n")
-	incm=["1-(login)--> login to a home ","2-(account)--> make account "]
+	print(Fore.LIGHTBLUE_EX+" WELCOME TO PASSWDB ! :)\n")
+	incm=[" 1-(login)--> login to a home ","2-(acount)--> make acount "]
 	for e in incm:
-		print(Fore.CYAN+"➜"+Fore.LIGHTBLUE_EX+" "+e,"\n")
+		print(Fore.CYAN+" ➜"+Fore.LIGHTBLUE_EX+" "+e,"\n")
 		sleep(0.2)
-	print(Fore.LIGHTGREEN_EX+"➜"+Fore.LIGHTBLUE_EX+" (+)Fine, Enter number of Section !\n")
-	com=(input(Fore.LIGHTGREEN_EX+"➜"+Fore.LIGHTBLACK_EX+" KALI@HASHER "+Fore.LIGHTRED_EX+"✗ "+Fore.LIGHTBLUE_EX))
+	print(Fore.LIGHTGREEN_EX+" ➜"+Fore.LIGHTBLUE_EX+" (+)Fine, Enter number of Section !\n")
+	com=(input(Fore.LIGHTGREEN_EX+" ➜"+Fore.LIGHTBLACK_EX+" KALI@HASHER "+Fore.LIGHTRED_EX+"✗ "+Fore.LIGHTBLUE_EX))
 	if com == "1":
-		name=input(Fore.LIGHTGREEN_EX+"➜"+Fore.LIGHTBLUE_EX+" Enter Your Name "+Fore.LIGHTRED_EX+"✗ "+Fore.LIGHTBLUE_EX+"")
-		passwd=input(Fore.LIGHTGREEN_EX+"➜"+Fore.LIGHTBLUE_EX+" Enter your password "+Fore.LIGHTRED_EX+"✗ "+Fore.LIGHTBLUE_EX)
-		print(Fore.LIGHTCYAN_EX+"➜"+Fore.LIGHTBLUE_EX+" "+"OK !, Please wite ...")
+		name=input(Fore.LIGHTGREEN_EX+" ➜"+Fore.LIGHTBLUE_EX+" Enter Your Name "+Fore.LIGHTRED_EX+"✗ "+Fore.LIGHTBLUE_EX+"")
+		passwd=input(Fore.LIGHTGREEN_EX+" ➜"+Fore.LIGHTBLUE_EX+" Enter your password "+Fore.LIGHTRED_EX+"✗ "+Fore.LIGHTBLUE_EX)
+		print(Fore.LIGHTCYAN_EX+" ➜"+Fore.LIGHTBLUE_EX+" "+"OK !, Please wite ...")
 		import sqlite3
 		try:
 			db=sqlite3.connect(".li.db")
 			ac=db.execute("SELECT * FROM li")
 			sname=name
 		except:
-			print(Fore.LIGHTRED_EX+"➜"+Fore.LIGHTBLUE_EX+" "+"account is not exists !")
-			input(Fore.CYAN+"➜"+Fore.LIGHTBLUE_EX+" Press enter to back "+Fore.LIGHTRED_EX+"✗ "+Fore.LIGHTBLUE_EX)
+			print(Fore.LIGHTRED_EX+" ➜"+Fore.LIGHTBLUE_EX+" "+"account is not exists !")
+			input(Fore.CYAN+" ➜"+Fore.LIGHTBLUE_EX+" Press enter to back "+Fore.LIGHTRED_EX+"✗ "+Fore.LIGHTBLUE_EX)
 			loginer()
 		for pname,ppasswd,phash in ac:
 			nname=pname
@@ -204,12 +204,12 @@ def login():
 			if passwd == npasswd:
 				main(sname)
 			else:
-				print(Fore.LIGHTRED_EX+"➜"+Fore.LIGHTBLUE_EX+" name or password is wrong ! ")
-				input(Fore.LIGHTRED_EX+"➜"+Fore.LIGHTBLUE_EX+" Press enter to back "+Fore.LIGHTRED_EX+"✗ "+Fore.LIGHTBLUE_EX)
+				print(Fore.LIGHTRED_EX+" ➜"+Fore.LIGHTBLUE_EX+" name or password is wrong ! ")
+				input(Fore.LIGHTRED_EX+" ➜"+Fore.LIGHTBLUE_EX+" Press enter to back "+Fore.LIGHTRED_EX+"✗ "+Fore.LIGHTBLUE_EX)
 				loginer()
 		else:
-			print(Fore.LIGHTRED_EX+"➜"+Fore.LIGHTBLUE_EX+" name or password is wrong ! ")
-			input(Fore.LIGHTRED_EX+"➜"+Fore.LIGHTBLUE_EX+" Press enter to back "+Fore.LIGHTRED_EX+"✗ "+Fore.LIGHTBLUE_EX)
+			print(Fore.LIGHTRED_EX+" ➜"+Fore.LIGHTBLUE_EX+" name or password is wrong ! ")
+			input(Fore.LIGHTRED_EX+" ➜"+Fore.LIGHTBLUE_EX+" Press enter to back "+Fore.LIGHTRED_EX+"✗ "+Fore.LIGHTBLUE_EX)
 			loginer()
 
 	elif com == "2":
@@ -227,14 +227,14 @@ def main(sname):
 	incm=["1-(Write)--> write a passwd and create hash for it","2-(Read)--> Read the name, passwd and hash it on database",\
 	"3-(Delete)--> delete one or all record of database"]
 	for e in incm:
-		print(Fore.CYAN+"➜"+Fore.LIGHTBLUE_EX+" "+e,"\n")
+		print(Fore.CYAN+" ➜"+Fore.LIGHTBLUE_EX+" "+e,"\n")
 		sleep(0.2)
-	print(Fore.LIGHTGREEN_EX+"➜"+Fore.LIGHTBLUE_EX+" (+)Fine, Enter number of Section !\n")
-	com=(input(Fore.LIGHTGREEN_EX+"➜"+Fore.LIGHTBLACK_EX+" KALI@HASHER "+Fore.LIGHTRED_EX+"✗ "+Fore.LIGHTBLUE_EX))
+	print(Fore.LIGHTGREEN_EX+" ➜"+Fore.LIGHTBLUE_EX+" (+)Fine, Enter number of Section !\n")
+	com=(input(Fore.LIGHTGREEN_EX+" ➜"+Fore.LIGHTBLACK_EX+" KALI@HASHER "+Fore.LIGHTRED_EX+"✗ "+Fore.LIGHTBLUE_EX))
 	if com == "1":
-		name=input(Fore.LIGHTGREEN_EX+"➜"+Fore.LIGHTBLUE_EX+" Enter name of passwd "+Fore.LIGHTRED_EX+"✗ "+Fore.LIGHTBLUE_EX).strip()
-		passwd=input(Fore.LIGHTGREEN_EX+"➜"+Fore.LIGHTBLUE_EX+" Enter your password => "+Fore.LIGHTRED_EX+"✗ "+Fore.LIGHTBLUE_EX).strip()
-		print(Fore.CYAN+"➜"+Fore.LIGHTBLUE_EX+" OK, Please wite ...")
+		name=input(Fore.LIGHTGREEN_EX+" ➜"+Fore.LIGHTBLUE_EX+" Enter name of passwd "+Fore.LIGHTRED_EX+"✗ "+Fore.LIGHTBLUE_EX).strip()
+		passwd=input(Fore.LIGHTGREEN_EX+" ➜"+Fore.LIGHTBLUE_EX+" Enter your password => "+Fore.LIGHTRED_EX+"✗ "+Fore.LIGHTBLUE_EX).strip()
+		print(Fore.CYAN+" ➜"+Fore.LIGHTBLUE_EX+" OK, Please wite ...")
 		hash(sname,name,passwd)
 	elif com == "2":
 		sqliteR(sname)
@@ -244,8 +244,8 @@ def main(sname):
 		os.chdir(pwd)
 		sys.exit()
 	else:
-		print(Fore.LIGHTRED_EX+"➜"+Fore.LIGHTBLUE_EX+" This is no found !")
-		input(Fore.LIGHTRED_EX+"➜"+Fore.LIGHTBLUE_EX+" Press enter to back "+Fore.LIGHTRED_EX+"✗ "+Fore.LIGHTBLUE_EX)
+		print(Fore.LIGHTRED_EX+" ➜"+Fore.LIGHTBLUE_EX+" This is no found !")
+		input(Fore.LIGHTRED_EX+" ➜"+Fore.LIGHTBLUE_EX+" Press enter to back "+Fore.LIGHTRED_EX+"✗ "+Fore.LIGHTBLUE_EX)
 		main(sname)
 loginer()
 sname=""
