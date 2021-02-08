@@ -28,7 +28,6 @@ WELCOME TO PASSWDB ! :)
 
 ➜ KALI@HASHER ✗ 
 
-
 ## Used of following library :
 
 	1- slqite3
