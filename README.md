@@ -3,7 +3,7 @@
 hi there.
 
 # --> description :
-	This is a PASSWDB app for upkeeping passwords. ...
+	This is a 'passwdb' app for upkeep a passwords.
 
 #--> Used of following library :
 
