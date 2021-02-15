@@ -20,6 +20,8 @@ print("""** WELCOME TO PASSWDB \n
     			## For 'EXIT', Enter 'quit' !\n""")
 ##THIS IS THE FUNCTOIN FOR SAVE A PASSW0RD AND HASHs ON DATABASE
 def sqliteW(sname,name,passwd,hash):
+	os.system("clear") if os.name=="posix" else os.system("cls")
+	banner()
 	import sqlite3
 	try:
 		dname=sname
@@ -41,7 +43,7 @@ def sqliteW(sname,name,passwd,hash):
 		main(sname)
 def sqliteR(sname):
 	import sqlite3
-	os.system("clear")
+	os.system("clear") if os.name=="posix" else os.system("cls")
 	banner()
 	print(Fore.CYAN+"➜"+Fore.LIGHTBLUE_EX+""" ## Please Enter name of password or Enter the ('all') to show all record of database !
 		For 'EXIT', Enter 'quit'""")
@@ -88,9 +90,11 @@ def sqliteR(sname):
 				main(sname)
 ##THIS IS THE FUNCTION FOR DELETE RECORD OF DATABASE
 def sqliteD(sname):
+	os.system("clear") if os.name=="posix" else os.system("cls")
+	banner()
 	from time import sleep
-	inec=["1-(Delete[one record])--> delete a (name,passwd), one record of database",\
-	"2-(Delete[all record])--> delete a all record of database"]
+	inec=["1-(Delete[one record])--> delete a one record of database",\
+	"2-(Delete[all record])--> delete all record of database"]
 	for i in inec:
 		print(Fore.CYAN+"➜"+Fore.LIGHTBLUE_EX+" "+i,"\n")
 		sleep(0.2)
@@ -143,7 +147,7 @@ def hash(sname,name,passwd):
 #	print("This is the hash of passwd --> %s"%(hash))
 ##THIS IS THE MAIB FUNCTION 
 def acount():
-	os.system("clear")
+	os.system("clear") if os.name == "posxi" else os.system("cls")
 	banner()
 	print(Fore.LIGHTBLUE_EX+" WELCOME TO PASSWDB \n ! :)")
 	name=input(Fore.LIGHTGREEN_EX+" ➜"+Fore.LIGHTBLUE_EX+" Enter Your Name "+Fore.LIGHTRED_EX+"✗ "+Fore.LIGHTBLUE_EX+"")
@@ -177,13 +181,15 @@ def login():
 	os.system("clear")
 	banner()
 	print(Fore.LIGHTBLUE_EX+" WELCOME TO PASSWDB ! :)\n")
-	incm=[" 1-(login)--> login to a home ","2-(acount)--> make acount "]
+	incm=["1-(login)--> login to a home ","2-(acount)--> make acount "]
 	for e in incm:
 		print(Fore.CYAN+" ➜"+Fore.LIGHTBLUE_EX+" "+e,"\n")
 		sleep(0.2)
 	print(Fore.LIGHTGREEN_EX+" ➜"+Fore.LIGHTBLUE_EX+" (+)Fine, Enter number of Section !\n")
 	com=(input(Fore.LIGHTGREEN_EX+" ➜"+Fore.LIGHTBLACK_EX+" KALI@HASHER "+Fore.LIGHTRED_EX+"✗ "+Fore.LIGHTBLUE_EX))
 	if com == "1":
+		os.system("clear") if os.name == "posix" else os.system("cls")
+		banner()
 		name=input(Fore.LIGHTGREEN_EX+" ➜"+Fore.LIGHTBLUE_EX+" Enter Your Name "+Fore.LIGHTRED_EX+"✗ "+Fore.LIGHTBLUE_EX+"")
 		passwd=input(Fore.LIGHTGREEN_EX+" ➜"+Fore.LIGHTBLUE_EX+" Enter your password "+Fore.LIGHTRED_EX+"✗ "+Fore.LIGHTBLUE_EX)
 		print(Fore.LIGHTCYAN_EX+" ➜"+Fore.LIGHTBLUE_EX+" "+"OK !, Please wite ...")
