@@ -27,7 +27,7 @@
 
  ➜ KALI@HASHER ✗ 
 </pre>
-## Used of following library :
+## Use of following library :
 
 	1- slqite3
 	2- hashlib
@@ -47,7 +47,7 @@
 
 ## ScreenShot  (HOME)
 
-![passwdb](https://user-images.githubusercontent.com/71703544/107191680-87e99d80-69ba-11eb-8b64-72f9a0923c9c.png)
+![passwdb-home](https://user-images.githubusercontent.com/71703544/108718741-c28c2380-74ec-11eb-98d3-d2c0cfa4be52.png)
 
 
 my email : sajadsajad.sch@gmail.com
