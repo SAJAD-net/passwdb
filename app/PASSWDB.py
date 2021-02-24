@@ -22,6 +22,7 @@ print("""** WELCOME TO PASSWDB \n
 def sqliteW(sname,name,passwd,hash):
 	os.system("clear") if os.name=="posix" else os.system("cls")
 	banner()
+	pwd=os.getcwd()
 	import sqlite3
 	try:
 		dname=sname
@@ -45,6 +46,7 @@ def sqliteR(sname):
 	import sqlite3
 	os.system("clear") if os.name=="posix" else os.system("cls")
 	banner()
+	pwd=os.getcwd()
 	print(Fore.CYAN+"➜"+Fore.LIGHTBLUE_EX+""" ## Please Enter name of password or Enter the ('all') to show all record of database !
 		For 'EXIT', Enter 'quit'""")
 	cms=input(Fore.LIGHTGREEN_EX+"➜"+Fore.LIGHTBLACK_EX+" KALI@HASHER "+Fore.LIGHTRED_EX+"✗ "+Fore.LIGHTBLUE_EX)
@@ -66,6 +68,7 @@ def sqliteR(sname):
 			input("Press enter to back ")
 			main(sname)
 	elif cms == "quit":
+		os.chdir(pwd)
 		sys.exit()
 	else:
 		try:
@@ -92,6 +95,7 @@ def sqliteR(sname):
 def sqliteD(sname):
 	os.system("clear") if os.name=="posix" else os.system("cls")
 	banner()
+	pwd=os.getcwd()
 	from time import sleep
 	inec=["1-(Delete[one record])--> delete a one record of database",\
 	"2-(Delete[all record])--> delete all record of database"]
@@ -135,6 +139,7 @@ def sqliteD(sname):
 			input(Fore.CYAN+"➜"+Fore.LIGHTBLUE_EX+" I can't ot delete all records,Press Enter to back" +Fore.LIGHTRED_EX+"✗ "+Fore.LIGHTBLUE_EX)
 			main(sname)
 	elif ind == "exit" or "quit":
+		os.chdir(pwd)
 		sys.exit()
 	else:
 		print(Fore.CYAN+"➜"+Fore.LIGHTRED_EX+" Not Found !")
@@ -153,6 +158,7 @@ def hash(sname,name,passwd):
 def acount():
 	os.system("clear") if os.name == "posxi" else os.system("cls")
 	banner()
+	pwd=os.getcwd()
 	print(Fore.LIGHTBLUE_EX+" WELCOME TO PASSWDB \n ! :)")
 	name=input(Fore.LIGHTGREEN_EX+" ➜"+Fore.LIGHTBLUE_EX+" Enter Your Name "+Fore.LIGHTRED_EX+"✗ "+Fore.LIGHTBLUE_EX+"")
 	passwd=input(Fore.LIGHTGREEN_EX+" ➜"+Fore.LIGHTBLUE_EX+" Enter your password For Login "+Fore.LIGHTRED_EX+"✗ "+Fore.LIGHTBLUE_EX)
@@ -182,7 +188,8 @@ def acount():
 		login()
 def login():
 	from time import sleep 
-	os.system("clear")
+	os.system("clear") if os.name == "posix" else os.system("cls")
+	pwd=os.getcwd()
 	banner()
 	print(Fore.LIGHTBLUE_EX+" WELCOME TO PASSWDB ! :)\n")
 	incm=["1-(login)--> login to a home ","2-(acount)--> make acount "]
@@ -225,6 +232,7 @@ def login():
 	elif com == "2":
 		acount()
 	elif com == "exit" or "quit":
+		os.chdir(pwd)
 		sys.exit()
 def loginer():
 	os.system("clear")
@@ -232,7 +240,7 @@ def loginer():
 def main(sname):
 	from time import sleep 
 	pwd=os.getcwd()
-	os.system("clear")
+	os.system("clear") if os.name == "posix" else os.system("cls")
 	banner()
 	incm=["1-(Write)--> write a passwd and create hash for it","2-(Read)--> Read the name, passwd and hash it on database",\
 	"3-(Delete)--> delete one or all record of database"]
