@@ -238,6 +238,8 @@ def main(sname):
 	print(Fore.LIGHTGREEN_EX+" ➜"+Fore.LIGHTBLUE_EX+" (+)Fine, Enter number of Section !\n")
 	com=(input(Fore.LIGHTGREEN_EX+" ➜"+Fore.LIGHTBLACK_EX+" KALI@HASHER "+Fore.LIGHTRED_EX+"✗ "+Fore.LIGHTBLUE_EX))
 	if com == "1":
+		os.system("clear") if os.name == "posix" else os.system("cls")
+		banner()
 		name=input(Fore.LIGHTGREEN_EX+" ➜"+Fore.LIGHTBLUE_EX+" Enter name of passwd "+Fore.LIGHTRED_EX+"✗ "+Fore.LIGHTBLUE_EX).strip()
 		passwd=input(Fore.LIGHTGREEN_EX+" ➜"+Fore.LIGHTBLUE_EX+" Enter your password => "+Fore.LIGHTRED_EX+"✗ "+Fore.LIGHTBLUE_EX).strip()
 		print(Fore.CYAN+" ➜"+Fore.LIGHTBLUE_EX+" OK, Please wite ...")
