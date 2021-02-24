@@ -101,6 +101,8 @@ def sqliteD(sname):
 	ind=input(Fore.LIGHTGREEN_EX+"➜"+Fore.LIGHTBLUE_EX+" Enter number of Section "+Fore.LIGHTRED_EX+"✗ "+Fore.LIGHTBLUE_EX)
 	dname=sname
 	if ind == "1":
+		os.system("clear") if os.name=="posix" else os.system("cls")
+		banner()
 		name=input("Enter name of record "+Fore.LIGHTRED_EX+"✗ "+Fore.LIGHTBLUE_EX)
 		print(Fore.LIGHTGREEN_EX+"OK ... ")
 		passwd=input(Fore.LIGHTGREEN_EX+"➜"+Fore.LIGHTBLUE_EX+" Enter passwd of record "+Fore.LIGHTRED_EX+"✗ "+Fore.LIGHTBLUE_EX)
@@ -118,6 +120,8 @@ def sqliteD(sname):
 		else:
 			main(sname)
 	elif ind == "2":
+		os.system("clear") if os.name=="posix" else os.system("cls")
+		banner()
 		es=input(Fore.LIGHTGREEN_EX+"➜"+Fore.LIGHTBLUE_EX+" Do you want to delete it ? [Y/N] "+Fore.LIGHTRED_EX+"✗ "+Fore.LIGHTBLUE_EX).upper()
 		if es == "Y":
 			import sqlite3
