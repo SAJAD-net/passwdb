@@ -156,7 +156,7 @@ def hash(sname,name,passwd):
 #	print("This is the hash of passwd --> %s"%(hash))
 ##THIS IS THE MAIB FUNCTION 
 def acount():
-	os.system("clear") if os.name == "posxi" else os.system("cls")
+	os.system("clear") if os.name == "posix" else os.system("cls")
 	banner()
 	pwd=os.getcwd()
 	print(Fore.LIGHTBLUE_EX+" WELCOME TO PASSWDB \n ! :)")
