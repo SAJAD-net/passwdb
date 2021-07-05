@@ -1,6 +1,7 @@
 #!/usr/bin/python3
 
 ##THIS IS THE IMPORTING OS LIBRARY
+import readline
 import os,sys
 from colorama import Fore,init
 init()
