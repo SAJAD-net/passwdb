@@ -17,6 +17,9 @@
 
 	pip install termcolor
 	pip install colorama
+		OR:
+	python3 requirements.py
+		THEN:
 	python3 PASSWDB.py
 	
 
