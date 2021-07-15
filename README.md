@@ -6,7 +6,7 @@
 
 ## used libraries:
 
-	1- slqite3
+	1- sqlite3
 	2- hashlib
 	3- colorama
 	4- termcolor
