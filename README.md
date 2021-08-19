@@ -12,7 +12,11 @@
 
 
 ## *install*
-	pip install passwdb
+	git clone https://github.com/SAJAD-net/passwdb.git
+	cd passwdb
+	pip install -r requirements.txt
+	cd app
+	python passwdb.py
 	
 ## *contributions*
 
