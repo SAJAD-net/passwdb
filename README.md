@@ -1,35 +1,29 @@
-# PASSWDB
+# *PASSWDB*     <img src="https://img.shields.io/badge/License-GPLv3-blue"></img>  <img src="https://img.shields.io/badge/python-up%20to%20date-red">   </img> <img src="https://img.shields.io/badge/version-0.5-yellow"></img> <img src="https://img.shields.io/badge/status-beta-green"></img>
+
+## *a tool for upkeep the passwords*
+
+         ██████╗  █████╗ ███████╗███████╗██╗    ██╗██████╗ ██████╗
+         ██╔══██╗██╔══██╗██╔════╝██╔════╝██║    ██║██╔══██╗██╔══██╗
+         ██████╔╝███████║███████╗███████╗██║ █╗ ██║██║  ██║██████╔╝
+         ██╔═══╝ ██╔══██║╚════██║╚════██║██║███╗██║██║  ██║██╔══██╗
+         ██║     ██║  ██║███████║███████║╚███╔███╔╝██████╔╝██████╔╝
+         ╚═╝     ╚═╝  ╚═╝╚══════╝╚══════╝ ╚══╝╚══╝ ╚═════╝ ╚═════╝
+				 passwdb v0.5
 
 
-## description:
-	"" This is a 'passwdb' app for upkeep a passwords. ""
-
-## used libraries:
-
-	1- sqlite3
-	2- hashlib
-	3- colorama
-	4- termcolor
-	5- readline
-	6- os, sys
+## *install*
+	pip install passwdb
 	
-## how to run:
+## *contributions*
 
-	pip install termcolor
-	pip install colorama
-		OR:
-	python3 requirements.py
-		THEN:
-	python3 PASSWDB.py
-## preview:	
+*Fork the repository*
 
-### login
-![passwdb](https://user-images.githubusercontent.com/71703544/124815805-b2be2a80-df35-11eb-94ad-ace9faacfea2.png)
+*Found a problem, want to give a tip? open an issue.*
 
-### home
-![passwdb1](https://user-images.githubusercontent.com/71703544/124817348-ad61df80-df37-11eb-9ab6-f1c61049d742.png)
+*Do you have a solution to the problem? Send me a PR.*
 
-### passwords display
-![passwdb2](https://user-images.githubusercontent.com/71703544/124817240-80adc800-df37-11eb-9964-66e372f223f0.png)
+*Did you like this project? Click on the little star :)*
 
-## my email : sajadsajad.sch@gmail.com
+*Do whatever you like :)*
+
+## *my gmail : sajadsajad.sch@gmail.com*
