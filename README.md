@@ -11,7 +11,7 @@
 				 passwdb v0.8
 
 
-## *install*
+## *installation as usage*
 	git clone https://github.com/SAJAD-net/passwdb.git
 	cd passwdb
 	pip install -r requirements.txt
@@ -20,14 +20,8 @@
 	
 ## *contributions*
 
-*Fork the repository*
-
-*Found a problem, want to give a tip? open an issue.*
-
-*Do you have a solution to the problem? Send me a PR.*
-
 *Did you like this project? Click on the little star :)*
 
 *Do whatever you like :)*
 
-## *my gmail : sajadsajad.sch@gmail.com*
+## *my email : sajadsajad.sch@gmail.com*
