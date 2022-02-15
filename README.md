@@ -18,10 +18,6 @@
 	cd app
 	python passwdb.py
 	
-## *contributions*
-
-*Did you like this project? Click on the little star :)*
-
-*Do whatever you like :)*
+### *Do whatever you like :)*
 
 ## *my email : sajadsajad.sch@gmail.com*
