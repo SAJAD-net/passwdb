@@ -2,26 +2,62 @@
 
 import readline
 import os,sys
-from colorama import Fore,init
-init()
 from termcolor import colored
 from getpass import getpass
 from time import sleep
 import pathlib, re
 import sqlite3
 import hashlib
+from colorama import Fore,init
+init()
 
+#Finds the $HOME path
 home=pathlib.Path.home()
 nhome=re.findall(r"\w*",str(home))
 home="/"+nhome[1]+"/"+nhome[3]
 
-#logo printer
+#Gets an input to return
+def back():
+    input(Fore.LIGHTBLUE_EX+" press enter to return "+Fore.LIGHTRED_EX+"✗ "+Fore.LIGHTBLUE_EX)
 
+def passwdb(sname): 
+    pwd=os.getcwd()
+    os.system("clear") if os.name == "posix" else os.system("cls")
+    logo()
+    
+    incm=["[0]- write","[1]- read","[2]- delete"]
+    for e in incm:
+        print(Fore.YELLOW+" ➜"+Fore.LIGHTBLUE_EX+" "+e,"\n")
+        sleep(0.2)
+    
+    com=(input(Fore.LIGHTBLUE_EX+" passwdb "+Fore.LIGHTRED_EX+"✗ "+Fore.LIGHTBLUE_EX))  
+   
+    if com == "0":
+        os.system("clear") if os.name == "posix" else os.system("cls")
+        logo()
+        
+        name=input(Fore.LIGHTBLUE_EX+" enter username "+Fore.LIGHTRED_EX+"✗ "+Fore.LIGHTBLUE_EX).strip()
+        passwd = getpass(Fore.LIGHTBLUE_EX+" enter password "+Fore.LIGHTRED_EX+"✗ "+Fore.LIGHTBLUE_EX)	
+        print(Fore.LIGHTBLUE_EX+" ok, please wite ...")
+        
+        hasher(sname,name,passwd)
+
+    elif com == "1":
+        sqliteR(sname)
+    elif com == "2":
+        sqliteD(sname)
+    else:
+        os.chdir(pwd)
+        sys.exit()
+
+
+#Checks if $HOME/.passwdb exists and if not, builds it
 def homeC():
     if not os.path.exists(f"{home}/.passwdb"):
         os.mkdir(f"{home}/.passwdb")
         os.mkdir(f"{home}/.passwdb/.data")   
 
+#Prints the Passwdb logo 
 def logo():
     logo = """
          ██████╗  █████╗ ███████╗███████╗██╗    ██╗██████╗ ██████╗ 
@@ -31,9 +67,9 @@ def logo():
          ██║     ██║  ██║███████║███████║╚███╔███╔╝██████╔╝██████╔╝
          ╚═╝     ╚═╝  ╚═╝╚══════╝╚══════╝ ╚══╝╚══╝ ╚═════╝ ╚═════╝ """
     print(colored(text=logo, color='yellow'))
-    print("\t"*4,colored(text="passwdb v0.5", color='yellow', attrs=['blink']))
+    print("\t"*4,colored(text="passwdb v0.8", color='yellow', attrs=['blink']))
 
-# this function saved the passwords and hashs on databases 
+#This function stores passwords in the database
 def sqliteW(sname,name,passwd,_hash):
     os.system("clear") if os.name=="posix" else os.system("cls")
     logo()
@@ -49,11 +85,12 @@ def sqliteW(sname,name,passwd,_hash):
         db.execute(f"INSERT INTO hashs VALUES('{name}', '{passwd}', '{_hash}')")
     finally:
         print(Fore.LIGHTBLUE_EX+" Query 1,OK")
-        input(Fore.LIGHTBLUE_EX+" press enter to return "+Fore.LIGHTRED_EX+"✗ "+Fore.LIGHTBLUE_EX)
+        back()
         db.commit()
         db.close()
         passwdb(sname)
         
+#Checks whether the database is empty or not
 def empty(sname):
     db = sqlite3.connect(f".{sname}.db")
     cursor = db.cursor()
@@ -65,14 +102,13 @@ def empty(sname):
     else:
          return False
 
-# database reade    r		
+#Reads databsae data
 def sqliteR(sname):
-## readin the passwords from dateabase
     os.system("clear") if os.name=="posix" else os.system("cls")
     logo()
     pwd=os.getcwd()
 
-    print(Fore.LIGHTBLUE_EX+" name of password or enter all")
+    print(Fore.LIGHTBLUE_EX+" enter the password name or type the all word")
     cms=input(Fore.LIGHTBLUE_EX+" passwdb "+Fore.LIGHTRED_EX+"✗ "+Fore.LIGHTBLUE_EX)
     dname=sname
     flash = f"{Fore.YELLOW}➜{Fore.LIGHTCYAN_EX}"
@@ -91,7 +127,7 @@ def sqliteR(sname):
         except Exception as e:
             print(Fore.LIGHTRED_EX+"➜"+Fore.LIGHTBLUE_EX+e)
         finally:
-            input(Fore.LIGHTBLUE_EX+" press enter to return "+Fore.LIGHTRED_EX+"✗ "+Fore.LIGHTBLUE_EX)
+            back()
             db.close()
             passwdb(sname)
 
@@ -109,10 +145,10 @@ def sqliteR(sname):
             print(Fore.LIGHTRED_EX+"➜ "+Fore.LIGHTBLUE_EX+e)
         finally:
             db.close()
-            input(Fore.LIGHTBLUE_EX+" press enter to return "+Fore.LIGHTRED_EX+"✗ "+Fore.LIGHTBLUE_EX)
+            back()
             passwdb(sname)
 
-# Password remover				
+#Removes the passwords from database		
 def sqliteD(sname):
     os.system("clear") if os.name=="posix" else os.system("cls")
     logo()
@@ -143,10 +179,10 @@ def sqliteD(sname):
             except:
                 print(Fore.LIGHTRED_EX+"➜"+Fore.LIGHTRED_EX+" This password isn't exists !")
             finally:    
-                input(Fore.LIGHTBLUE_EX+" press enter to return "+Fore.LIGHTRED_EX+"✗ "+Fore.LIGHTBLUE_EX)
+                back()
                 passwdb(sname)
         else:
-            input(Fore.LIGHTBLUE_EX+" press enter to return "+Fore.LIGHTRED_EX+"✗ "+Fore.LIGHTBLUE_EX)
+            back()
             passwdb(sname)
     elif ind == "1":
         os.system("clear") if os.name=="posix" else os.system("cls")
@@ -160,22 +196,22 @@ def sqliteD(sname):
             db.close()
 
             print(Fore.LIGHTBLUE_EX+" Query 1, OK")
-            input(Fore.LIGHTBLUE_EX+" press enter to return "+Fore.LIGHTRED_EX+"✗ "+Fore.LIGHTBLUE_EX)
+            back()
             passwdb(sname)
         else:
-            input(Fore.LIGHTBLUE_EX+" press enter to return" +Fore.LIGHTRED_EX+"✗ "+Fore.LIGHTBLUE_EX)
+            back()
             passwdb(sname)
     elif ind == "quit":
         os.chdir(pwd)
         sys.exit()
     else:
         print(Fore.LIGHTRED_EX+"➜"+Fore.LIGHTRED_EX+" not found !")
-        input(Fore.LIGHTBLUE_EX+" press enter to return "+Fore.LIGHTRED_EX+"✗ "+Fore.LIGHTBLUE_EX)
+        back()
         passwdb(sname)
 		
-# this function hashs the passwords
+#This function hashes passwords
 def hasher(sname,name,passwd):
-    ## Hashes the password and then calls the sqliteW function
+    ##Hashes the password and then calls the sqliteW function
 
     hsh=hashlib.md5()
     hsh.update(passwd.encode("utf-8"))
@@ -183,7 +219,7 @@ def hasher(sname,name,passwd):
 
     sqliteW(sname,name,passwd,_hash)
 
-# account creator
+#Builds accounts
 def account():
     os.system("clear") if os.name == "posix" else os.system("cls")
     logo()
@@ -207,7 +243,7 @@ def account():
             for n, p, h in xe:
                 if n == name:            
                     print(Fore.LIGHTRED_EX+"➜"+Fore.LIGHTBLUE_EX+" this account already exists !")
-                    input(Fore.LIGHTBLUE_EX+" press enter to return "+Fore.LIGHTRED_EX+"✗ "+Fore.LIGHTBLUE_EX)
+                    back()
                     ex.close()
                     login()           
         except:
@@ -220,15 +256,15 @@ def account():
         db.commit()
         db.close()
         print(Fore.LIGHTBLUE_EX+" Query 1,OK")
-        input(Fore.LIGHTBLUE_EX+" press enter to return "+Fore.LIGHTRED_EX+"✗ "+Fore.LIGHTBLUE_EX)
+        back()
         login()
     except Exception as e:
         print(Fore.LIGHTRED_EX+"➜"+Fore.LIGHTBLUE_EX+e)
-        input(Fore.LIGHTBLUE_EX+" press enter to return "+Fore.LIGHTRED_EX+"✗ "+Fore.LIGHTBLUE_EX)
+        back()
         login()
 
 
-## login function
+#Checks the authenticity of the username/password user for user login
 def login():
     os.system("clear") if os.name == "posix" else os.system("cls")
     pwd=os.getcwd()
@@ -256,8 +292,8 @@ def login():
             sname=name
         except:
             print(Fore.LIGHTRED_EX+" ➜"+Fore.LIGHTBLUE_EX+" account is not exists !")
-            input(Fore.LIGHTBLUE_EX+" press enter to return "+Fore.LIGHTRED_EX+"✗ "+Fore.LIGHTBLUE_EX)
-            loginer()
+            back()
+            main()
 
         for pname,ppasswd,phash in ac:
             nname=pname
@@ -268,12 +304,12 @@ def login():
                 passwdb(sname)
             else:
                 print(Fore.LIGHTRED_EX+" ➜"+Fore.LIGHTBLUE_EX+" name or password is wrong ! ")
-                input(Fore.LIGHTBLUE_EX+" press enter to return "+Fore.LIGHTRED_EX+"✗ "+Fore.LIGHTBLUE_EX)
-                loginer()
+                back()
+                main()
         else:
             print(Fore.LIGHTRED_EX+" ➜"+Fore.LIGHTBLUE_EX+" name or password is wrong ! ")
-            input(Fore.LIGHTBLUE_EX+" press enter to return "+Fore.LIGHTRED_EX+"✗ "+Fore.LIGHTBLUE_EX)
-            loginer()
+            back()
+            main()
 
     elif com == "1":
         account()
@@ -281,45 +317,11 @@ def login():
         os.chdir(pwd)
         sys.exit()
 
-def loginer():
+#Calls the homeC and login function 
+def main():
     homeC()
     login()
 	
-def passwdb(sname): 
-    
-    pwd=os.getcwd()
-    os.system("clear") if os.name == "posix" else os.system("cls")
-    logo()
-    
-    incm=["[0]- write","[1]- read","[2]- delete"]
-    for e in incm:
-        print(Fore.YELLOW+" ➜"+Fore.LIGHTBLUE_EX+" "+e,"\n")
-        sleep(0.2)
-    
-    com=(input(Fore.LIGHTBLUE_EX+" passwdb "+Fore.LIGHTRED_EX+"✗ "+Fore.LIGHTBLUE_EX))  
-   
-    if com == "0":
-        os.system("clear") if os.name == "posix" else os.system("cls")
-        logo()
-        
-        name=input(Fore.LIGHTBLUE_EX+" enter name "+Fore.LIGHTRED_EX+"✗ "+Fore.LIGHTBLUE_EX).strip()
-        passwd = getpass(Fore.LIGHTBLUE_EX+" enter password "+Fore.LIGHTRED_EX+"✗ "+Fore.LIGHTBLUE_EX)	
-        print(Fore.LIGHTBLUE_EX+" ok, please wite ...")
-        
-        hasher(sname,name,passwd)
+if __name__ == "__main__":
+    main() # Runs as the first function
 
-    elif com == "1":
-        sqliteR(sname)
-    elif com == "2":
-        sqliteD(sname)
-    else:
-        os.chdir(pwd)
-        sys.exit()
-
-loginer() # Runs as the first function
-sname=""
-
-if __name__ == "__passwdb__":passwdb(sname)
-if __name__ == "__account__":account()
-if __name__ == "__login__":login()
-if __name__ == "__loginer__":loginer()
