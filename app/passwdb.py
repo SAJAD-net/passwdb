@@ -2,12 +2,14 @@
 
 import readline
 import os,sys
-from termcolor import colored
-from getpass import getpass
-from time import sleep
-import pathlib, re
-import sqlite3
 import hashlib
+import pathlib, re
+from time import sleep
+import sqlite3
+from getpass import getpass
+import pyperclip
+from cryptography.fernet import Fernet
+from termcolor import colored
 from colorama import Fore,init
 init()
 
@@ -18,15 +20,12 @@ home="/"+nhome[1]+"/"+nhome[3]
 
 #Gets an input to return
 def back():
-    input(Fore.LIGHTBLUE_EX+" press enter to return "+Fore.LIGHTRED_EX+"✗ "+Fore.LIGHTBLUE_EX)
+    input(Fore.LIGHTBLUE_EX+" press [Enter] to return "+Fore.LIGHTRED_EX+"✗ "+Fore.LIGHTBLUE_EX)
 
-def clear():
-    os.system("clear") if os.name == "posix" else os.system("cls")
-    logo()
 
 def passwdb(sname):
     pwd=os.getcwd()
-    clear() 
+    logo() 
     
     incm=["[0]- write","[1]- read","[2]- delete"]
     for e in incm:
@@ -36,11 +35,11 @@ def passwdb(sname):
     com=(input(Fore.LIGHTBLUE_EX+" passwdb "+Fore.LIGHTRED_EX+"✗ "+Fore.LIGHTBLUE_EX))  
    
     if com == "0":
-        clear()
+        logo()
 
-        name=input(Fore.LIGHTBLUE_EX+" enter username "+Fore.LIGHTRED_EX+"✗ "+Fore.LIGHTBLUE_EX).strip()
-        passwd = getpass(Fore.LIGHTBLUE_EX+" enter password "+Fore.LIGHTRED_EX+"✗ "+Fore.LIGHTBLUE_EX)	
-        print(Fore.LIGHTBLUE_EX+" ok, please wite ...")
+        name=input(Fore.LIGHTBLUE_EX+" username "+Fore.LIGHTRED_EX+"✗ "+Fore.LIGHTBLUE_EX).strip()
+        passwd = getpass(Fore.LIGHTBLUE_EX+" [MASTER] password "+Fore.LIGHTRED_EX+"✗ "+Fore.LIGHTBLUE_EX)	
+        #print(Fore.LIGHTBLUE_EX+" ok, please wait ...")
         
         hasher(sname,name,passwd)
 
@@ -61,6 +60,7 @@ def homeC():
 
 #Prints the Passwdb logo 
 def logo():
+    os.system("clear") if os.name == "posix" else os.system("cls")
     logo = """
          ██████╗  █████╗ ███████╗███████╗██╗    ██╗██████╗ ██████╗ 
          ██╔══██╗██╔══██╗██╔════╝██╔════╝██║    ██║██╔══██╗██╔══██╗
@@ -73,7 +73,7 @@ def logo():
 
 #This function stores passwords in the database
 def sqliteW(sname,name,passwd,_hash):
-    clear()
+    logo()
     pwd=os.getcwd()
 
     try:
@@ -105,7 +105,7 @@ def empty(sname):
 
 #Reads databsae data
 def sqliteR(sname):
-    clear()
+    logo()
     pwd=os.getcwd()
 
     print(Fore.LIGHTBLUE_EX+" enter the password name or type the all word")
@@ -150,7 +150,7 @@ def sqliteR(sname):
 
 #Removes the passwords from database		
 def sqliteD(sname):
-    clear()
+    logo()
     pwd=os.getcwd()
 
     inec=["[0]- one", "[1]- all"]
@@ -162,7 +162,7 @@ def sqliteD(sname):
     dname=sname
 
     if ind == "0":
-        clear()
+        logo()
         name=input(Fore.LIGHTBLUE_EX+" enter name "+Fore.LIGHTRED_EX+"✗ "+Fore.LIGHTBLUE_EX)
         passwd=input(Fore.LIGHTBLUE_EX+" enter password "+Fore.LIGHTRED_EX+"✗ "+Fore.LIGHTBLUE_EX)
         es=input(Fore.LIGHTBLUE_EX+" do you want to delete it ? [Y/n] "+Fore.LIGHTRED_EX+"✗ "+Fore.LIGHTBLUE_EX).upper()
@@ -183,7 +183,7 @@ def sqliteD(sname):
             back()
             passwdb(sname)
     elif ind == "1":
-        clear()
+        logo()
         es=input(Fore.LIGHTBLUE_EX+" do you want to delete it ? [y/n] "+Fore.LIGHTRED_EX+"✗ "+Fore.LIGHTBLUE_EX).upper()
         if es == "Y":
             os.chdir(f"{home}/.passwdb/.data")
@@ -218,12 +218,12 @@ def hasher(sname,name,passwd):
 
 #Builds accounts
 def account():
-    clear()
+    logo()
     pwd=os.getcwd()
     
     name=input(Fore.LIGHTBLUE_EX+" enter name "+Fore.LIGHTRED_EX+"✗ "+Fore.LIGHTBLUE_EX)
     passwd = getpass(Fore.LIGHTBLUE_EX+" enter password "+Fore.LIGHTRED_EX+"✗ "+Fore.LIGHTBLUE_EX)
-    print(Fore.LIGHTBLUE_EX+" ok !, please wite ...")
+    print(Fore.LIGHTBLUE_EX+" ok !, please wait ...")
     sleep(3)
     
     hsh=hashlib.md5()
@@ -262,7 +262,7 @@ def account():
 
 #Checks the authenticity of the username/password user for user login
 def login():
-    clear()
+    logo()
     pwd=os.getcwd()
     
     print(Fore.LIGHTBLUE_EX+" WELCOME TO PASSWDB ! :)\n")
@@ -272,11 +272,11 @@ def login():
     com=(input(Fore.LIGHTBLUE_EX+" passwdb "+Fore.LIGHTRED_EX+"✗ "+Fore.LIGHTBLUE_EX))
     
     if com == "0":
-        clear()
+        logo()
         
         name=input(Fore.LIGHTBLUE_EX+" enter name "+Fore.LIGHTRED_EX+"✗ "+Fore.LIGHTBLUE_EX+"")
         passwd = getpass(Fore.LIGHTBLUE_EX+" enter password "+Fore.LIGHTRED_EX+"✗ "+Fore.LIGHTBLUE_EX)
-        print(Fore.LIGHTBLUE_EX+" ok !, please wite ...")
+        print(Fore.LIGHTBLUE_EX+" ok !, please wait ...")
 
 
         try:
