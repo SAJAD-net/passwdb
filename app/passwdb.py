@@ -1,5 +1,6 @@
-#!/usr/bin/python3
+#!/usr/bin/env python3
 
+from base64 import b64encode, urlsafe_b64encode
 import readline
 import os,sys
 import hashlib
@@ -9,6 +10,8 @@ import sqlite3
 from getpass import getpass
 import pyperclip
 from cryptography.fernet import Fernet
+from cryptography.hazmat.primitives import hashes
+from cryptography.hazmat.primitives.kdf.pbkdf2 import PBKDF2HMAC
 from termcolor import colored
 from colorama import Fore,init
 init()
@@ -18,326 +21,359 @@ home=pathlib.Path.home()
 nhome=re.findall(r"\w*",str(home))
 home="/"+nhome[1]+"/"+nhome[3]
 
+
 #Gets an input to return
 def back():
-    input(Fore.LIGHTBLUE_EX+" press [Enter] to return "+Fore.LIGHTRED_EX+"✗ "+Fore.LIGHTBLUE_EX)
+    input(Fore.LIGHTBLUE_EX+" [Enter] to return "+Fore.LIGHTRED_EX+"✗ "+Fore.LIGHTBLUE_EX)
 
 
-def passwdb(sname):
-    pwd=os.getcwd()
+def passwdb(sname, mpassword):
     logo() 
     
     incm=["[0]- write","[1]- read","[2]- delete"]
-    for e in incm:
-        print(Fore.YELLOW+" ➜"+Fore.LIGHTBLUE_EX+" "+e,"\n")
+    for option in incm:
+        print(Fore.YELLOW+" ➜"+Fore.LIGHTBLUE_EX+" "+str(option),"\n")
         sleep(0.2)
     
-    com=(input(Fore.LIGHTBLUE_EX+" passwdb "+Fore.LIGHTRED_EX+"✗ "+Fore.LIGHTBLUE_EX))  
+    choice = input(Fore.LIGHTBLUE_EX+" passwdb "+Fore.LIGHTRED_EX+"✗ "+Fore.LIGHTBLUE_EX).strip()   
    
-    if com == "0":
+    if choice == "0":
         logo()
 
-        name=input(Fore.LIGHTBLUE_EX+" username "+Fore.LIGHTRED_EX+"✗ "+Fore.LIGHTBLUE_EX).strip()
-        passwd = getpass(Fore.LIGHTBLUE_EX+" [MASTER] password "+Fore.LIGHTRED_EX+"✗ "+Fore.LIGHTBLUE_EX)	
-        #print(Fore.LIGHTBLUE_EX+" ok, please wait ...")
+        name = input(Fore.LIGHTBLUE_EX+" name "+Fore.LIGHTRED_EX+"✗ "+Fore.LIGHTBLUE_EX).strip()
+        password = getpass(Fore.LIGHTBLUE_EX+" password "+Fore.LIGHTRED_EX+"✗ "+Fore.LIGHTBLUE_EX).strip()	
         
-        hasher(sname,name,passwd)
+        write_password(sname, name, password, mpassword)
 
-    elif com == "1":
-        read_password(sname)
-    elif com == "2":
-        delete_password(sname)
+    elif choice == "1":
+        read_password(sname, mpassword)
+
+    elif choice == "2":
+        delete_password(sname, mpassword)
+    
     else:
+        pwd=os.getcwd()
         os.chdir(pwd)
         sys.exit()
 
 
 #Checks if $HOME/.passwdb directory exists, otherwise, creates it
-def homeC():
+def create_home_dir():
     if not os.path.exists(f"{home}/.passwdb"):
         os.mkdir(f"{home}/.passwdb")
         os.mkdir(f"{home}/.passwdb/.data")   
+    
+    os.chdir(f"{home}/.passwdb/.data")
 
-#Prints the Passwdb logo 
+
+#Prints the passwdb logo 
 def logo():
     os.system("clear") if os.name == "posix" else os.system("cls")
-    logo = """
+    logo_str = """
          ██████╗  █████╗ ███████╗███████╗██╗    ██╗██████╗ ██████╗ 
          ██╔══██╗██╔══██╗██╔════╝██╔════╝██║    ██║██╔══██╗██╔══██╗
          ██████╔╝███████║███████╗███████╗██║ █╗ ██║██║  ██║██████╔╝
          ██╔═══╝ ██╔══██║╚════██║╚════██║██║███╗██║██║  ██║██╔══██╗
          ██║     ██║  ██║███████║███████║╚███╔███╔╝██████╔╝██████╔╝
          ╚═╝     ╚═╝  ╚═╝╚══════╝╚══════╝ ╚══╝╚══╝ ╚═════╝ ╚═════╝ """
-    print(colored(text=logo, color='yellow'))
+    print(colored(text=logo_str, color='yellow'))
     print("\t"*4,colored(text="passwdb v0.8", color='yellow', attrs=['blink']))
 
+
 #This function stores passwords in the database
-def write_password(sname,name,passwd,hashed):
+def write_password(sname, name, password, mpassword):
     logo()
-    pwd=os.getcwd()
+    
+    hashed = encrypt_password(sname, mpassword, password)
+    db = sqlite3.connect(f".{sname}.db")
 
     try:
-        dname=sname
-        os.chdir(f"{home}/.passwdb/.data")
-        db=sqlite3.connect(f".{dname}.db")
-        db.execute("CREATE TABLE hashs (name varchar(20),password INT,hashs varchar(32))")
-        db.execute(f"INSERT INTO hashs VALUES('{name}', '{passwd}', '{hashed}')")
+        db.execute("CREATE TABLE passwsh (name varchar(20), hash varchar(64))")
+        db.execute(f"INSERT INTO passwsh VALUES('{name}', '{hashed}')")
+
     except sqlite3.OperationalError:
-        db.execute(f"INSERT INTO hashs VALUES('{name}', '{passwd}', '{hashed}')")
+        db.execute(f"INSERT INTO passwsh VALUES('{name}', '{hashed}')")
+
     finally:
-        print(Fore.LIGHTBLUE_EX+" Query 1,OK")
-        back()
+        print(Fore.LIGHTBLUE_EX+" Query 1, OK")
         db.commit()
         db.close()
-        passwdb(sname)
+        back()
+        passwdb(sname, mpassword)
         
+
 #Checks whether the database is is_empty or not
 def is_empty(sname):
     db = sqlite3.connect(f".{sname}.db")
     cursor = db.cursor()
-    cursor.execute('''SELECT COUNT(*) from hashs ''')
-    result=cursor.fetchall()
+    cursor.execute('''SELECT COUNT(*) from passwsh''')
+    result = cursor.fetchall()[0][0]
+    cursor.close()
     db.close()
-    if result[0][0] == 0:
-        return True 
-    else:
-         return False
+    if result == 0:
+        return True
+
+    return False
+
 
 #Reads databsae data
-def read_password(sname):
+def read_password(sname, mpassword):
     logo()
-    pwd=os.getcwd()
 
-    print(Fore.LIGHTBLUE_EX+" Enter the password name or type 'all' to get all the passwords")
-    cms=input(Fore.LIGHTBLUE_EX+" passwdb "+Fore.LIGHTRED_EX+"✗ "+Fore.LIGHTBLUE_EX).lower()
-    dname=sname
+    print(Fore.LIGHTBLUE_EX+" Enter the password name or type 'all' to get a list of all the passwords")
+    choice = input(Fore.LIGHTBLUE_EX+" passwdb "+Fore.LIGHTRED_EX+"✗ "+Fore.LIGHTBLUE_EX).strip()
+    
+    if not os.path.exists(f"{home}/.passwdb/.data/.{sname}.db"):
+        print(Fore.LIGHTRED_EX+"➜"+Fore.LIGHTBLUE_EX+" No password in the database")
+        back()
+        passwdb(sname, mpassword)
+
     flash = f"{Fore.YELLOW}➜{Fore.LIGHTCYAN_EX}"
-    if cms == "all":
+    if choice == "all":
         try:
-            os.chdir(f"{home}/.passwdb/.data")
-            db=sqlite3.connect(f".{dname}.db") 
-            hashs=db.execute("SELECT * FROM hashs")
+            db = sqlite3.connect(f".{sname}.db") 
+   
+            result=db.execute("SELECT * FROM passwsh")
+            
             if is_empty(sname):
                 print(Fore.LIGHTRED_EX+"➜"+Fore.LIGHTBLUE_EX+" there is no password in the database")
-            else:
-                for name,passwd,phash in hashs:
-                    print(Fore.LIGHTCYAN_EX+f"\tname {flash} {name}\n\tpassword {flash} {passwd}\n\tsha256 {flash} {phash}\n")
+                db.close()
+                back()
+                passwdb(sname, mpassword)
+
+            for name, _ in result.fetchall():
+                print(Fore.LIGHTCYAN_EX+f"\tname {flash} {name}")
             
             print(Fore.LIGHTBLUE_EX+" Query 1, OK")
         
         except Exception as e:
-            print(Fore.LIGHTRED_EX+"➜"+Fore.LIGHTBLUE_EX+e)
+            print(Fore.LIGHTRED_EX+"➜ "+Fore.LIGHTBLUE_EX+str(e))
         
         finally:
-            back()
             db.close()
-            passwdb(sname)
+            back()
+            passwdb(sname, mpassword)
 
-    elif cms == "quit":
+    elif choice == "quit":
+        pwd=os.getcwd()
         os.chdir(pwd)
         sys.exit()
 
     else:
         try:
-            os.chdir(f"{home}/.passwdb/.data")
-            db=sqlite3.connect(f".{dname}.db") 
-            hashs=db.execute(f"SELECT *  FROM hashs WHERE name='{cms}'")
-            for name,passwd,phash in hashs:
-                print(Fore.LIGHTCYAN_EX+f"\tname {flash} {name}\n\tpassword {flash} {passwd}\n\tsha256 {flash} {phash}")
+            db = sqlite3.connect(f".{sname}.db") 
+            result = db.execute(f"SELECT * FROM passwsh WHERE name='{choice}'")
+            name, hashed = result.fetchone()
+          
+            password=decrypt_password(sname, mpassword, hashed)
+            pyperclip.copy(password)
+            print(Fore.LIGHTCYAN_EX+f"\tname {flash} {name}\n\tpassword {flash} copied !\n")
         
-        except Exception as e:
-            print(Fore.LIGHTRED_EX+"➜ "+Fore.LIGHTBLUE_EX+e)
-        
+        except:
+            print(Fore.LIGHTRED_EX+"➜"+Fore.LIGHTRED_EX+" Password doesn't exist!")
+
         finally:
             db.close()
             back()
-            passwdb(sname)
+            passwdb(sname, mpassword)
 
-#Removes the passwords from database		
-def delete_password(sname):
+
+#Deleting password from the database		
+def delete_password(sname, mpassword):
     logo()
-    pwd=os.getcwd()
 
-    #inec=["[0]- one", "[1]- all"]
-    #for i in inec:
-    #    print(Fore.YELLOW+"➜"+Fore.LIGHTBLUE_EX+" "+i,"\n")
-    #    sleep(0.2)
-
-    print(Fore.LIGHTBLUE_EX+" Enter the password name or type 'all' to wipe all the passwords")
-    cms=input(Fore.LIGHTBLUE_EX+" passwdb "+Fore.LIGHTRED_EX+"✗ "+Fore.LIGHTBLUE_EX).lower()
-    dname=sname
-    #ind=input(Fore.LIGHTBLUE_EX+" passwdb "+Fore.LIGHTRED_EX+"✗ "+Fore.LIGHTBLUE_EX)
-    #dname=sname
-
-    if ind == "all":
+    print(Fore.LIGHTBLUE_EX+" Enter the password name or 'all' to wipe all the passwords")
+    cms = input(Fore.LIGHTBLUE_EX+" passwdb "+Fore.LIGHTRED_EX+"✗ "+Fore.LIGHTBLUE_EX).strip()
+    
+    if cms == "all":
         logo()
-        es=input(Fore.LIGHTBLUE_EX+" do you want to delete it ? [y/n] "+Fore.LIGHTRED_EX+"✗ "+Fore.LIGHTBLUE_EX).upper()
-        if es == "Y":
-            os.chdir(f"{home}/.passwdb/.data")
-            db=sqlite3.connect(f".{dname}.db") 
-            db.execute("DELETE FROM hashs")
+
+        choice = input(Fore.LIGHTBLUE_EX+" Are you sure ? [Y/n] "+Fore.LIGHTRED_EX+"✗ "+Fore.LIGHTBLUE_EX).upper()
+        if choice == "Y":
+            db = sqlite3.connect(f".{sname}.db") 
+            db.execute("DELETE FROM passwsh")
             db.commit()
             db.close()
 
             print(Fore.LIGHTBLUE_EX+" Query 1, OK")
+            
             back()
-            passwdb(sname)
+            passwdb(sname, mpassword)
+
         else:
-            print(Fore.LIGHTRED_EX+"➜"+Fore.LIGHTRED_EX+" cancelling ...")
+            print(Fore.LIGHTRED_EX+"➜"+Fore.LIGHTRED_EX+" Cancelled")
             back()
-            passwdb(sname)
+            passwdb(sname, mpassword)
 
-    elif ind == "1":
-        logo()
-        #name=input(Fore.LIGHTBLUE_EX+" enter name "+Fore.LIGHTRED_EX+"✗ "+Fore.LIGHTBLUE_EX)
-        #passwd=input(Fore.LIGHTBLUE_EX+" enter password "+Fore.LIGHTRED_EX+"✗ "+Fore.LIGHTBLUE_EX)
-        es=input(Fore.LIGHTBLUE_EX+" do you want to delete it ? [Y/n] "+Fore.LIGHTRED_EX+"✗ "+Fore.LIGHTBLUE_EX).upper()
-        if es == "Y":
-            os.chdir(f"{home}/.passwdb/.data")
-            db=sqlite3.connect(f".{dname}.db") 
-            try:
-                #db.execute("DELETE FROM hashs WHERE name='%s' AND password='%s' "%(name,passwd))
-                db.execute(f"DELETE FROM hashs WHERE name='{cms}'")
-                db.commit()
-                db.close()
-                print(Fore.LIGHTBLUE_EX+" Query 1, OK")
-
-            except:
-                print(Fore.LIGHTRED_EX+"➜"+Fore.LIGHTRED_EX+" password doesn't exist!")
-
-            finally:    
-                back()
-                passwdb(sname)
-        
-        else:
-            print(Fore.LIGHTRED_EX+"➜"+Fore.LIGHTRED_EX+" cancelling ...")
-            back()
-            passwdb(sname)
-    
-    elif ind == "quit":
+    elif cms == "quit":
+        pwd=os.getcwd()
         os.chdir(pwd)
         sys.exit()
     
     else:
-        print(Fore.LIGHTRED_EX+"➜"+Fore.LIGHTRED_EX+" not found !")
-        back()
-        passwdb(sname)
+        logo()
+
+        choice = input(Fore.LIGHTBLUE_EX+" Are you sure ? [Y/n] "+Fore.LIGHTRED_EX+"✗ "+Fore.LIGHTBLUE_EX).upper()
+        if choice == "Y":
+            try:
+                db = sqlite3.connect(f".{sname}.db")
+                db.execute(f"DELETE FROM passwsh WHERE name='{cms}'")
+                print(Fore.LIGHTBLUE_EX+" Query 1, OK")
+
+            except:
+                print(Fore.LIGHTRED_EX+"➜"+Fore.LIGHTRED_EX+" Password doesn't exist!")
+
+            finally:
+                db.commit()
+                db.close()
+                back()
+                passwdb(sname, mpassword)
+        
+        else:
+            print(Fore.LIGHTRED_EX+"➜"+Fore.LIGHTRED_EX+" Cancelled")
+            back()
+            passwdb(sname, mpassword)
+    
 		
-#This function hashes passwords
-def hasher(sname,name,passwd):
-    ##Hashes the password and then calls the write_password function
+#encrypt passwords
+def encrypt_password(sname, mpassword, password):
+    ##Encrypts the password and then calls the write_password function
+    hashed = generate_key(sname, mpassword).encrypt(password.encode()).decode()
+    return hashed
 
+#decrypt passwords
+def decrypt_password(sname, mpassword, hashed):
+    ##Decrypts the password and then calls the write_password function
+    password = generate_key(sname, mpassword).decrypt(hashed.encode()).decode()
+    return password
+
+def generate_key(sname, mpassword):
+    # GENERATES A KEY FROM PASSWORD
+    try:
+        db = sqlite3.connect(f".account.db") 
+        result=db.execute(f"SELECT Salt FROM accounts WHERE Username='{sname}'")
+        salt = result.fetchone()[0]
+        db.close()
+
+        kdf = PBKDF2HMAC(
+        algorithm=hashes.SHA256(),
+        length=32,
+        salt=salt.encode(),
+        iterations=480000,
+        )
+         
+        key = urlsafe_b64encode(kdf.derive(mpassword.encode()))
+        return Fernet(key)
+
+    except Exception as e:
+        print(Fore.LIGHTRED_EX+"➜"+Fore.LIGHTBLUE_EX+str(e))
+
+# Hash the master password
+def mpassword_hash(mpassword):
     sha256=hashlib.sha256()
-    sha256.update(passwd.encode("utf-8"))
-    hashed=sha256.hexdigest()
+    sha256.update(mpassword.encode("utf-8"))
+    return sha256.hexdigest()
 
-    write_password(sname,name,passwd,hashed)
 
-#Builds accounts
+# Creating account
 def account():
     logo()
-    pwd=os.getcwd()
     
-    name=input(Fore.LIGHTBLUE_EX+" Username "+Fore.LIGHTRED_EX+"✗ "+Fore.LIGHTBLUE_EX).strip()
-    passwd = getpass(Fore.LIGHTBLUE_EX+" [MASTER] password "+Fore.LIGHTRED_EX+"✗ "+Fore.LIGHTBLUE_EX).strip()
-    print(Fore.LIGHTBLUE_EX+" ok !, please wait ...")
-    sleep(2)
+    username=input(Fore.LIGHTBLUE_EX+" Username "+Fore.LIGHTRED_EX+"✗ "+Fore.LIGHTBLUE_EX).strip()
+    mpassword = getpass(Fore.LIGHTBLUE_EX+" [MASTER] password "+Fore.LIGHTRED_EX+"✗ "+Fore.LIGHTBLUE_EX).strip()
     
-    sha256=hashlib.sha256()
-    sha256.update(passwd.encode("utf-8"))
-    hashed=sha256.hexdigest()
+    hashed = mpassword_hash(mpassword)
     
-    fe = False
-    os.chdir(f"{home}/.passwdb/.data")
+    texist = False
     
-    if os.path.exists(f"{home}/.passwdb/.data/.li.db"):
+    if os.path.exists(f"{home}/.passwdb/.data/.account.db"):
         try:
-            ex=sqlite3.connect(".li.db")
-            xe = ex.execute("SELECT * from li")    
-            fe = True
-            for n, p, h in xe:
-                if n == name:            
-                    print(Fore.LIGHTRED_EX+"➜"+Fore.LIGHTBLUE_EX+" Username already exists !")
-                    back()
-                    ex.close()
-                    login()           
+            db = sqlite3.connect(".account.db")
+   
+            result = db.execute(f"SELECT * from accounts WHERE Username='{username}'")    
+            
+            if result.fetchone():
+                print(Fore.LIGHTRED_EX+"➜"+Fore.LIGHTBLUE_EX+" Username already exists !")
+                db.close()
+                back()
+                login()           
+
+            db.close()
+            texist = True
+            
         except:
-            return
+            db.close()
 
     try:
-        db=sqlite3.connect(".li.db")
-        if fe == False:
-            db.execute("CREATE TABLE li (name varchar(20),password INT,hashs varchar(32))")
-        db.execute("INSERT INTO li VALUES('%s','%s','%s')"%(name,passwd,hashed))
+        db = sqlite3.connect(".account.db")
+        if not texist:
+            db.execute("CREATE TABLE accounts (Username varchar(20), Hash varchar(64), Salt varchar(32))")
+        
+        salt = b64encode(os.urandom(16)).decode('utf-8')
+        db.execute(f"INSERT INTO accounts VALUES('{username}',{hashed}', '{salt}')")
         db.commit()
         db.close()
 
-        print(Fore.LIGHTBLUE_EX+" Query 1,OK")
+        print(Fore.LIGHTBLUE_EX+" Query 1, OK")
         back()
         login()
 
     except Exception as e:
-        print(Fore.LIGHTRED_EX+"➜"+Fore.LIGHTBLUE_EX+e)
+        print(Fore.LIGHTRED_EX+"➜"+Fore.LIGHTBLUE_EX+str(e))
+        db.close()
         back()
         login()
 
 
-#Checks the authenticity of the username/password user for user login
+#Checks the authenticity of the username/password.
 def login():
-    logo()
     pwd=os.getcwd()
+    logo()
     
     print(Fore.LIGHTBLUE_EX+" WELCOME TO PASSWDB ! :)\n")
+    
     incm=["[0]- login ","[1]- account"] 
     for e in incm:
-        print(Fore.YELLOW+" ➜"+Fore.LIGHTBLUE_EX+" "+e,"\n")
-    com=(input(Fore.LIGHTBLUE_EX+" passwdb "+Fore.LIGHTRED_EX+"✗ "+Fore.LIGHTBLUE_EX))
+        print(Fore.YELLOW+" ➜"+Fore.LIGHTBLUE_EX+" "+str(e),"\n")
     
-    if com == "0":
+    choice = input(Fore.LIGHTBLUE_EX+" passwdb "+Fore.LIGHTRED_EX+"✗ "+Fore.LIGHTBLUE_EX)
+    
+    if choice == "0":
         logo()
         
-        name=input(Fore.LIGHTBLUE_EX+" enter name "+Fore.LIGHTRED_EX+"✗ "+Fore.LIGHTBLUE_EX+"")
-        passwd = getpass(Fore.LIGHTBLUE_EX+" enter password "+Fore.LIGHTRED_EX+"✗ "+Fore.LIGHTBLUE_EX)
-        print(Fore.LIGHTBLUE_EX+" ok !, please wait ...")
-
+        username=input(Fore.LIGHTBLUE_EX+" Username "+Fore.LIGHTRED_EX+"✗ "+Fore.LIGHTBLUE_EX+"")
+        mpassword = getpass(Fore.LIGHTBLUE_EX+ "[MASTER] password "+Fore.LIGHTRED_EX+"✗ "+Fore.LIGHTBLUE_EX)
+        hashed = mpassword_hash(mpassword)
 
         try:
-            os.chdir(f"{home}/.passwdb/.data")
-            db=sqlite3.connect(".li.db")
-            ac=db.execute("SELECT * FROM li")
-            sname=name
+            db = sqlite3.connect(".account.db")
+            result = db.execute(f"SELECT * FROM accounts WHERE Username='{username}' AND Hash='{hashed}'")
+            if result.fetchone():
+                db.close()
+                passwdb(username, mpassword)
+            
+            print(Fore.LIGHTRED_EX+" ➜"+Fore.LIGHTBLUE_EX+" Username or password is wrong ! ")
+            db.close()
+            back()
+            main()
+            
         except:
-            print(Fore.LIGHTRED_EX+" ➜"+Fore.LIGHTBLUE_EX+" account is not exists !")
+            print(Fore.LIGHTRED_EX+" ➜"+Fore.LIGHTBLUE_EX+" Account doesn't exist !")
+            db.close()
             back()
             main()
 
-        for pname,ppasswd,phash in ac:
-            nname=pname
-            npasswd=ppasswd
-            nhash=phash
-        if name == nname:
-            if passwd == npasswd:
-                passwdb(sname)
-            else:
-                print(Fore.LIGHTRED_EX+" ➜"+Fore.LIGHTBLUE_EX+" name or password is wrong ! ")
-                back()
-                main()
-        else:
-            print(Fore.LIGHTRED_EX+" ➜"+Fore.LIGHTBLUE_EX+" name or password is wrong ! ")
-            back()
-            main()
-
-    elif com == "1":
+    elif choice == "1":
         account()
+    
     else:
         os.chdir(pwd)
         sys.exit()
 
-#Calls the homeC and login function 
-def main():
-    homeC()
-    login()
-	
-if __name__ == "__main__":
-    main() # Runs as the first function
 
+#Calls the create_home_dir and login functions
+def main():
+    create_home_dir()
+    login()
+
+main()
