@@ -1,3 +1,5 @@
+pyperclip
+cryptography
 colorama
 termcolor
 pyreadline
