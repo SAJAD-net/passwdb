@@ -23,6 +23,8 @@ home = pathlib.Path.home()
 nhome = re.findall(r"\w*", str(home))
 home = "/"+nhome[1]+"/"+nhome[3]
 
+first_location = os.getcwd()
+
 
 # Gets an input to return
 def back():
@@ -52,8 +54,7 @@ def passwdb(sname, mpassword):
         delete_password(sname, mpassword)
 
     else:
-        pwd = os.getcwd()
-        os.chdir(pwd)
+        os.chdir(first_location)
         sys.exit()
 
 
@@ -154,8 +155,7 @@ def read_password(sname, mpassword):
             passwdb(sname, mpassword)
 
     elif choice == "quit":
-        pwd = os.getcwd()
-        os.chdir(pwd)
+        os.chdir(first_location)
         sys.exit()
 
     else:
@@ -205,8 +205,7 @@ def delete_password(sname, mpassword):
             passwdb(sname, mpassword)
 
     elif cms == "quit":
-        pwd = os.getcwd()
-        os.chdir(pwd)
+        os.chdir(first_location)
         sys.exit()
 
     else:
@@ -328,7 +327,6 @@ def account():
 
 # Checks the authenticity of the username/password.
 def login():
-    pwd = os.getcwd()
     logo()
 
     print(Fore.LIGHTBLUE_EX+" WELCOME TO PASSWDB ! :)\n")
@@ -368,7 +366,7 @@ def login():
         account()
 
     else:
-        os.chdir(pwd)
+        os.chdir(first_location)
         sys.exit()
 
 
