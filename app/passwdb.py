@@ -2,7 +2,7 @@
 
 from base64 import b64encode, urlsafe_b64encode
 import readline
-import os
+import os.path
 import sys
 import hashlib
 import pathlib
@@ -18,13 +18,17 @@ from termcolor import colored
 from colorama import Fore, init
 init()
 
-# Finds the home path
-home = pathlib.Path.home()
-nhome = re.findall(r"\w*", str(home))
-home = "/"+nhome[1]+"/"+nhome[3]
+# Finds the home path in linux
+if os.name == "posix":
+    home = pathlib.Path.home()
+    nhome = re.findall(r"\w*", str(home))
+    home = "/"+nhome[1]+"/"+nhome[3]
+
+# Finds the home path in windows
+else:
+    home = str(pathlib.Path.home())
 
 first_location = os.getcwd()
-
 
 # Gets an input to return
 def back():
