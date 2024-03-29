@@ -36,30 +36,31 @@ def back():
 
 
 def passwdb(sname, mpassword):
-    logo()
-    incm = ["[0]- write", "[1]- read", "[2]- delete"]
-    for option in incm:
-        print(Fore.YELLOW+" ➜"+Fore.LIGHTBLUE_EX+" "+str(option), "\n")
-        sleep(0.2)
-
-    choice = input(Fore.LIGHTBLUE_EX+" passwdb "+Fore.LIGHTRED_EX+"✗ "+Fore.LIGHTBLUE_EX).strip()
-    if choice == "0":
+    while True:
         logo()
+        incm = ["[0]- write", "[1]- read", "[2]- delete"]
+        for option in incm:
+            print(Fore.YELLOW+"➜ "+Fore.LIGHTBLUE_EX+str(option), "\n")
+            sleep(0.2)
 
-        name = input(Fore.LIGHTBLUE_EX+" name "+Fore.LIGHTRED_EX+"✗ "+Fore.LIGHTBLUE_EX).strip()
-        password = getpass(Fore.LIGHTBLUE_EX+" password "+Fore.LIGHTRED_EX+"✗ "+Fore.LIGHTBLUE_EX).strip()
+        choice = input(Fore.LIGHTBLUE_EX+" passwdb "+Fore.LIGHTRED_EX+"✗ "+Fore.LIGHTBLUE_EX).strip()
+        if choice == "0":
+            logo()
 
-        write_password(sname, name, password, mpassword)
+            name = input(Fore.LIGHTBLUE_EX+" name "+Fore.LIGHTRED_EX+"✗ "+Fore.LIGHTBLUE_EX).strip()
+            password = getpass(Fore.LIGHTBLUE_EX+" password "+Fore.LIGHTRED_EX+"✗ "+Fore.LIGHTBLUE_EX).strip()
 
-    elif choice == "1":
-        read_password(sname, mpassword)
+            write_password(sname, name, password, mpassword)
 
-    elif choice == "2":
-        delete_password(sname, mpassword)
+        elif choice == "1":
+            read_password(sname, mpassword)
 
-    else:
-        os.chdir(first_location)
-        sys.exit()
+        elif choice == "2":
+            delete_password(sname, mpassword)
+
+        else:
+            os.chdir(first_location)
+            break
 
 
 # Checks if $HOME/.passwdb directory exists, otherwise, creates it
@@ -100,11 +101,10 @@ def write_password(sname, name, password, mpassword):
         db.execute(f"INSERT INTO passwsh VALUES('{name}', '{hashed}')")
 
     finally:
-        print(Fore.LIGHTBLUE_EX+" Query 1, OK")
+        print(Fore.LIGHTGREEN_EX+" Query 1, OK")
         db.commit()
         db.close()
         back()
-        passwdb(sname, mpassword)
 
 
 # Checks whether the database is is_empty or not
@@ -129,9 +129,8 @@ def read_password(sname, mpassword):
     choice = input(Fore.LIGHTBLUE_EX+" passwdb "+Fore.LIGHTRED_EX+"✗ "+Fore.LIGHTBLUE_EX).strip()
 
     if not os.path.exists(f"{home}/.passwdb/.data/.{sname}.db"):
-        print(Fore.LIGHTRED_EX+"➜"+Fore.LIGHTBLUE_EX+" No password in the database")
+        print(Fore.LIGHTRED_EX+"➜ "+Fore.LIGHTYELLOW_EX+" No password in the database")
         back()
-        passwdb(sname, mpassword)
 
     flash = f"{Fore.YELLOW}➜{Fore.LIGHTCYAN_EX}"
     if choice == "all":
@@ -140,23 +139,18 @@ def read_password(sname, mpassword):
             result = db.execute("SELECT * FROM passwsh")
 
             if is_empty(sname):
-                print(Fore.LIGHTRED_EX+"➜"+Fore.LIGHTBLUE_EX+" there is no password in the database")
-                db.close()
-                back()
-                passwdb(sname, mpassword)
+                print(Fore.LIGHTRED_EX+"➜ "+Fore.LIGHTYELLOW_EX+"There is no password in the database")
 
-            for name, _ in result.fetchall():
-                print(Fore.LIGHTCYAN_EX+f"\tname {flash} {name}")
-
-            print(Fore.LIGHTBLUE_EX+" Query 1, OK")
+            else:
+                for name, _ in result.fetchall():
+                    print(Fore.LIGHTCYAN_EX+f"\tname {flash} {name}")
 
         except Exception as e:
-            print(Fore.LIGHTRED_EX+"➜ "+Fore.LIGHTBLUE_EX+str(e))
+            print(Fore.LIGHTRED_EX+"➜ "+Fore.LIGHTYELLOW_EX+str(e))
 
         finally:
             db.close()
             back()
-            passwdb(sname, mpassword)
 
     elif choice == "quit":
         os.chdir(first_location)
@@ -173,12 +167,12 @@ def read_password(sname, mpassword):
             print(Fore.LIGHTCYAN_EX+f"\tname {flash} {name}\n\tpassword {flash} copied !\n")
 
         except:
-            print(Fore.LIGHTRED_EX+"➜"+Fore.LIGHTRED_EX+" Password doesn't exist!")
+            print(Fore.LIGHTRED_EX+"➜ "+Fore.LIGHTYELLOW_EX+" Password doesn't exist!")
 
         finally:
             db.close()
             back()
-            passwdb(sname, mpassword)
+
 
 
 # Deleting password from the database
@@ -197,16 +191,13 @@ def delete_password(sname, mpassword):
             db.execute("DELETE FROM passwsh")
             db.commit()
             db.close()
-
-            print(Fore.LIGHTBLUE_EX+" Query 1, OK")
-
+            print(Fore.LIGHTGREEN_EX+" Query 1, OK")
             back()
-            passwdb(sname, mpassword)
 
         else:
-            print(Fore.LIGHTRED_EX+"➜"+Fore.LIGHTRED_EX+" Cancelled")
+            print(Fore.LIGHTRED_EX+"➜ "+Fore.LIGHTYELLOW_EX+" Cancelled")
             back()
-            passwdb(sname, mpassword)
+
 
     elif cms == "quit":
         os.chdir(first_location)
@@ -220,21 +211,19 @@ def delete_password(sname, mpassword):
             try:
                 db = sqlite3.connect(f".{sname}.db")
                 db.execute(f"DELETE FROM passwsh WHERE name='{cms}'")
-                print(Fore.LIGHTBLUE_EX+" Query 1, OK")
+                print(Fore.LIGHTGREEN_EX+" Query 1, OK")
 
             except:
-                print(Fore.LIGHTRED_EX+"➜"+Fore.LIGHTRED_EX+" Password doesn't exist!")
+                print(Fore.LIGHTRED_EX+"➜ "+Fore.LIGHTYELLOW_EX+" Password doesn't exist!")
 
             finally:
                 db.commit()
                 db.close()
                 back()
-                passwdb(sname, mpassword)
- 
+
         else:
-            print(Fore.LIGHTRED_EX+"➜"+Fore.LIGHTRED_EX+" Cancelled")
+            print(Fore.LIGHTRED_EX+"➜ "+Fore.LIGHTRED_EX+" Cancelled")
             back()
-            passwdb(sname, mpassword)
 
 
 # Encrypt passwords
@@ -253,24 +242,20 @@ def decrypt_password(sname, mpassword, hashed):
 
 def generate_key(sname, mpassword):
     # GENERATES A KEY FROM PASSWORD
-    try:
-        db = sqlite3.connect(".account.db")
-        result = db.execute(f"SELECT Salt FROM accounts WHERE Username='{sname}'")
-        salt = result.fetchone()[0]
-        db.close()
+    db = sqlite3.connect(".account.db")
+    result = db.execute(f"SELECT Salt FROM accounts WHERE Username='{sname}'")
+    salt = result.fetchone()[0]
+    db.close()
 
-        kdf = PBKDF2HMAC(
-            algorithm=hashes.SHA256(),
-            length=32,
-            salt=salt.encode(),
-            iterations=480000,
-        )
+    kdf = PBKDF2HMAC(
+        algorithm=hashes.SHA256(),
+        length=32,
+        salt=salt.encode(),
+        iterations=480000,
+    )
 
-        key = urlsafe_b64encode(kdf.derive(mpassword.encode()))
-        return Fernet(key)
-
-    except Exception as e:
-        print(Fore.LIGHTRED_EX+"➜"+Fore.LIGHTBLUE_EX+str(e))
+    key = urlsafe_b64encode(kdf.derive(mpassword.encode()))
+    return Fernet(key)
 
 
 # Hash the master password
@@ -285,7 +270,7 @@ def account():
     logo()
 
     username = input(Fore.LIGHTBLUE_EX+" Username "+Fore.LIGHTRED_EX+"✗ "+Fore.LIGHTBLUE_EX).strip()
-    mpassword = getpass(Fore.LIGHTBLUE_EX+" [MASTER] password "+Fore.LIGHTRED_EX+"✗ "+Fore.LIGHTBLUE_EX).strip()
+    mpassword = getpass(Fore.LIGHTBLUE_EX+" MASTER password "+Fore.LIGHTRED_EX+"✗ "+Fore.LIGHTBLUE_EX).strip()
 
     hashed = mpassword_hash(mpassword)
 
@@ -297,7 +282,7 @@ def account():
 
             result = db.execute(f"SELECT * from accounts WHERE Username='{username}'")
             if result.fetchone():
-                print(Fore.LIGHTRED_EX+"➜"+Fore.LIGHTBLUE_EX+" Username already exists !")
+                print(Fore.LIGHTRED_EX+"➜ "+Fore.LIGHTYELLOW_EX+" Username already exists!")
                 db.close()
                 back()
                 login()
@@ -318,12 +303,12 @@ def account():
         db.commit()
         db.close()
 
-        print(Fore.LIGHTBLUE_EX+" Query 1, OK")
+        print(Fore.LIGHTGREEN_EX+" Query 1, OK")
         back()
         login()
 
     except Exception as e:
-        print(Fore.LIGHTRED_EX+"➜"+Fore.LIGHTBLUE_EX+str(e))
+        print(Fore.LIGHTRED_EX+"➜ "+Fore.LIGHTYELLOW_EX+str(e))
         db.close()
         back()
         login()
@@ -337,7 +322,7 @@ def login():
 
     incm = ["[0]- login ", "[1]- account"]
     for opt in incm:
-        print(Fore.YELLOW+" ➜"+Fore.LIGHTBLUE_EX+" "+str(opt),"\n")
+        print(Fore.YELLOW+" ➜ "+Fore.LIGHTBLUE_EX+" "+str(opt),"\n")
 
     choice = input(Fore.LIGHTBLUE_EX+" passwdb "+Fore.LIGHTRED_EX+"✗ "+Fore.LIGHTBLUE_EX)
 
@@ -345,7 +330,7 @@ def login():
         logo()
 
         username = input(Fore.LIGHTBLUE_EX+" Username "+Fore.LIGHTRED_EX+"✗ "+Fore.LIGHTBLUE_EX+"")
-        mpassword = getpass(Fore.LIGHTBLUE_EX + "[MASTER] password "+Fore.LIGHTRED_EX+"✗ "+Fore.LIGHTBLUE_EX)
+        mpassword = getpass(Fore.LIGHTBLUE_EX + " MASTER password "+Fore.LIGHTRED_EX+"✗ "+Fore.LIGHTBLUE_EX)
         hashed = mpassword_hash(mpassword)
 
         try:
@@ -355,29 +340,24 @@ def login():
                 db.close()
                 passwdb(username, mpassword)
 
-            print(Fore.LIGHTRED_EX+" ➜"+Fore.LIGHTBLUE_EX+" Username or password is wrong ! ")
-            db.close()
-            back()
-            main()
+            else:
+                print(Fore.LIGHTRED_EX+" ➜ "+Fore.LIGHTYELLOW_EX+" Username or password is wrong!")
+                db.close()
+                back()
+                login()
 
-        except:
-            print(Fore.LIGHTRED_EX+" ➜"+Fore.LIGHTBLUE_EX+" Account doesn't exist !")
+        except Exception:
+            print(Fore.LIGHTRED_EX+" ➜ "+Fore.LIGHTYELLOW_EX+" Account doesn't exist!")
             db.close()
             back()
-            main()
+            login()
 
     elif choice == "1":
         account()
 
     else:
         os.chdir(first_location)
-        sys.exit()
 
 
-# Calls the create_home_dir and login functions
-def main():
-    create_home_dir()
-    login()
-
-
-main()
+create_home_dir()
+login()
