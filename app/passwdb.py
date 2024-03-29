@@ -206,24 +206,25 @@ def delete_password(sname, mpassword):
     else:
         logo()
 
-        choice = input(Fore.LIGHTBLUE_EX+" Are you sure ? [Y/n] "+Fore.LIGHTRED_EX+"✗ "+Fore.LIGHTBLUE_EX).upper()
-        if choice == "Y":
-            try:
-                db = sqlite3.connect(f".{sname}.db")
+        db = sqlite3.connect(f".{sname}.db")
+        cursor = db.cursor()
+        cursor.execute(f"SELECT * FROM passwsh WHERE name='{cms}'")
+        if cursor.fetchone():
+            choice = input(Fore.LIGHTBLUE_EX+" Are you sure ? [Y/n] "+Fore.LIGHTRED_EX+"✗ "+Fore.LIGHTBLUE_EX).upper()
+            if choice == "Y":
                 db.execute(f"DELETE FROM passwsh WHERE name='{cms}'")
+                db.commit()
                 print(Fore.LIGHTGREEN_EX+" Query 1, OK")
 
-            except:
-                print(Fore.LIGHTRED_EX+"➜ "+Fore.LIGHTYELLOW_EX+" Password doesn't exist!")
-
-            finally:
-                db.commit()
-                db.close()
-                back()
+            else:
+                print(Fore.LIGHTRED_EX+"➜ "+Fore.LIGHTRED_EX+" Cancelled")
 
         else:
-            print(Fore.LIGHTRED_EX+"➜ "+Fore.LIGHTRED_EX+" Cancelled")
-            back()
+            print(Fore.LIGHTRED_EX+"➜ "+Fore.LIGHTYELLOW_EX+" Password doesn't exist!")
+
+        cursor.close()
+        db.close()
+        back()
 
 
 # Encrypt passwords
@@ -342,14 +343,14 @@ def login():
 
             else:
                 print(Fore.LIGHTRED_EX+" ➜ "+Fore.LIGHTYELLOW_EX+" Username or password is wrong!")
-                db.close()
                 back()
-                login()
 
         except Exception:
             print(Fore.LIGHTRED_EX+" ➜ "+Fore.LIGHTYELLOW_EX+" Account doesn't exist!")
-            db.close()
             back()
+
+        finally:
+            db.close()
             login()
 
     elif choice == "1":
