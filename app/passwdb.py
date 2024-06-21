@@ -38,7 +38,7 @@ def back():
 def passwdb(sname, mpassword):
     while True:
         logo()
-        incm = ["[0]- write", "[1]- read", "[2]- delete"]
+        incm = ["[0]- write", "[1]- read", "[2]- update", "[3]- delete"]
         for option in incm:
             print(Fore.YELLOW+"➜ "+Fore.LIGHTBLUE_EX+str(option), "\n")
             sleep(0.2)
@@ -56,6 +56,9 @@ def passwdb(sname, mpassword):
             read_password(sname, mpassword)
 
         elif choice == "2":
+            update_password(sname, mpassword)
+
+        elif choice == "3":
             delete_password(sname, mpassword)
 
         else:
@@ -107,7 +110,7 @@ def write_password(sname, name, password, mpassword):
         back()
 
 
-# Checks whether the database is is_empty or not
+# Check whether the database is empty
 def is_empty(sname):
     db = sqlite3.connect(f".{sname}.db")
     cursor = db.cursor()
@@ -119,6 +122,18 @@ def is_empty(sname):
         return True
 
     return False
+
+
+# Check whether a component exists
+def does_exist(sname, tname, cms):
+    db = sqlite3.connect(f".{sname}.db")
+    cursor = db.cursor()
+    cursor.execute(f"SELECT * FROM {tname} WHERE name='{cms}'")
+
+    if len(cursor.fetchall())==0:
+        return False
+
+    return True
 
 
 # Reads databsae data
@@ -173,6 +188,36 @@ def read_password(sname, mpassword):
             db.close()
             back()
 
+
+# Updating password
+def update_password(sname, mpassword):
+    logo()
+
+    flash = f"{Fore.YELLOW}➜{Fore.LIGHTCYAN_EX}"
+
+    print(Fore.LIGHTBLUE_EX+" Enter the password name")
+    cms = input(Fore.LIGHTBLUE_EX+" passwdb "+Fore.LIGHTRED_EX+"✗ "+Fore.LIGHTBLUE_EX).strip()
+
+    if does_exist(sname, "passwsh", cms):
+        print(Fore.LIGHTBLUE_EX+" Enter the new password")
+        password = input(Fore.LIGHTBLUE_EX+" passwdb "+Fore.LIGHTRED_EX+"✗ "+Fore.LIGHTBLUE_EX).strip()
+        hashed = encrypt_password(sname, mpassword, password)
+
+        print(Fore.LIGHTBLUE_EX+" Enter the new name, or hit enter")
+        name = input(Fore.LIGHTBLUE_EX+" passwdb "+Fore.LIGHTRED_EX+"✗ "+Fore.LIGHTBLUE_EX).strip()
+        new_name = cms if len(name.strip()) == 0 else name
+
+        db = sqlite3.connect(f".{sname}.db")
+        db.execute(f"UPDATE passwsh SET name='{new_name}', hash='{hashed}' WHERE name='{cms}'")
+        db.commit()
+        db.close()
+
+        print(Fore.LIGHTCYAN_EX+f"\tname {flash} {name}\n\tpassword updated !\n")
+
+    else:
+        print(Fore.LIGHTRED_EX+"➜ "+Fore.LIGHTYELLOW_EX+" Password doesn't exist!")
+
+    back()
 
 
 # Deleting password from the database
