@@ -157,9 +157,10 @@ def read_password(sname, mpassword):
                 print(Fore.LIGHTRED_EX+"➜ "+Fore.LIGHTYELLOW_EX+"There is no password in the database")
 
             else:
+                c = 0
                 for name, _ in result.fetchall():
-                    print(Fore.LIGHTCYAN_EX+f"\tname {flash} {name}")
-
+                    print(Fore.LIGHTCYAN_EX+f"\t[{str(c).zfill(2)}]- {flash} {name}")
+                    c += 1
         except Exception as e:
             print(Fore.LIGHTRED_EX+"➜ "+Fore.LIGHTYELLOW_EX+str(e))
 
